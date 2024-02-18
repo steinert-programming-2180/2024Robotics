@@ -18,6 +18,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAmp;
@@ -68,6 +69,7 @@ public class RobotContainer {
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandPS5Controller m_ps5driverController = new CommandPS5Controller(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -94,9 +96,10 @@ public class RobotContainer {
 
 
     // Configure the button bindings
-    configureButtonBindings();
+    xBoxConfigureButtonBindings();
+    pS5ConfigureButtonBindings();
 
-    // Configure default commands
+    // Configure XBox default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
@@ -107,6 +110,18 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+    
+    // Configure PS5 default commands
+    // m_robotDrive.setDefaultCommand(
+    //     // The left stick controls translation of the robot.
+    //     // Turning is controlled by the X axis of the right stick.
+    //     new RunCommand(
+    //         () -> m_robotDrive.drive(
+    //             -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
+    //             true, true),
+    //         m_robotDrive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -123,7 +138,7 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void xBoxConfigureButtonBindings() {
 
     m_driverController.y().onTrue(intakeForward).onFalse(intakeStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
@@ -137,6 +152,22 @@ public class RobotContainer {
     m_driverController.rightBumper().onTrue(lowerShooter);
   
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+  }
+
+  private void pS5ConfigureButtonBindings() {
+
+    m_ps5driverController.triangle().onTrue(intakeForward).onFalse(intakeStop);
+    m_ps5driverController.cross().onTrue(intakeReverse).onFalse(intakeStop);
+
+    m_ps5driverController.R2().onTrue(shootCommand).onFalse(stopShooting);
+
+    m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
+    m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
+
+    m_ps5driverController.R1().onTrue(raiseShooter).onFalse(stopShooter);
+    m_ps5driverController.L1().onTrue(lowerShooter).onFalse(stopShooter);
+  
+    m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
   
   public Command getAutonomousCommand() {
