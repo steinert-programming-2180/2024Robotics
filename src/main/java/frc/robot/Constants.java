@@ -11,7 +11,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-  public static final double[] speeds = {.25, .5, .75, 1};
   
   public static final class ConveyorConstants {
     public static final int conveyorMotorId = 11;
@@ -24,8 +23,21 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int leftFlyWheelMotor = 31;
     public static final int rightFlyWheelMotor = 32;
-    public static final int raiseMotor1 = 40;
-    public static final int raiseMotor2 = 41;
+
+    public static final int articulaitonMotorLeader = 40;
+    public static final int articulaitonMotorFollower = 41;
+
+    public static final double kArmP = 1;
+    public static final double kArmI = .0005;
+    public static final double kArmD = 1;
+
+    public static final double maxShooterAngle = 1.1;
+    public static final double minShooterAngle = 0.550;
+
+    public static final boolean inverShooterEncoder = false; // idk if I initally set zero while it was inverted.
+
+    // to do, set this to a specific value
+    public static final double ampAngle = (1.1 - .55) / 2 + .55;
   }
 
   public static final class DriveConstants {

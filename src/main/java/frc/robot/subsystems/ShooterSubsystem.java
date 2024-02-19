@@ -5,42 +5,57 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooter_leader;
     private final CANSparkMax shooter_follower;
+
     private final CANSparkMax arm_leader;
     private final CANSparkMax arm_follower;
 
-    private final SparkPIDController pidController;
+    private final SparkPIDController armPidController;
 
-    private final AbsoluteEncoder encoder;
+    private final AbsoluteEncoder arm_encoder;
 
     public ShooterSubsystem() {
         // Shooting Motors
         shooter_leader = new CANSparkMax(ShooterConstants.leftFlyWheelMotor, MotorType.kBrushless);
         shooter_follower  = new CANSparkMax(ShooterConstants.rightFlyWheelMotor, MotorType.kBrushless);
         shooter_follower.follow(shooter_leader, true);
-
-        arm_leader = new CANSparkMax(ShooterConstants.raiseMotor1, MotorType.kBrushless);
-        arm_follower  = new CANSparkMax(ShooterConstants.raiseMotor2, MotorType.kBrushless);
+        
+        // articulation motor 
+        arm_leader = new CANSparkMax(ShooterConstants.articulaitonMotorLeader, MotorType.kBrushless);
+        arm_follower  = new CANSparkMax(ShooterConstants.articulaitonMotorFollower, MotorType.kBrushless);
         arm_follower.follow(arm_leader, false);
 
-        pidController = arm_leader.getPIDController();
+        arm_leader.restoreFactoryDefaults();
 
-        encoder = arm_leader.getAbsoluteEncoder(Type.kDutyCycle);
-        pidController.setFeedbackDevice(encoder);
+        armPidController = arm_leader.getPIDController();
 
-        pidController.setP(1);
-        pidController.setI(.0005);
-        pidController.setD(1);
+        arm_encoder = arm_leader.getAbsoluteEncoder(Type.kDutyCycle);
+        armPidController.setFeedbackDevice(arm_encoder);
 
+        arm_encoder.setPositionConversionFactor(2 * Math.PI); // set to radians
+        arm_encoder.setVelocityConversionFactor(2 * Math.PI / 60); // set movment velocity to radians per second
 
-        SmartDashboard.putNumber("angle", encoder.getPosition());
+        arm_encoder.setInverted(ShooterConstants.inverShooterEncoder); // encoder is inverted, I think
+
+        armPidController.setP(ShooterConstants.kArmP);
+        armPidController.setI(ShooterConstants.kArmI);
+        armPidController.setD(ShooterConstants.kArmD);
+
+        arm_leader.burnFlash();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Angle", arm_encoder.getPosition());
     }
 
     public void shooter_forward() {
@@ -54,10 +69,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shooter_stop() {
         shooter_leader.set(0);
     }
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Angle", encoder.getPosition());
-    }
 
     public void arm_up() {
         arm_leader.set(-0.15);
@@ -67,9 +78,12 @@ public class ShooterSubsystem extends SubsystemBase {
         arm_leader.set(.15);
     }
 
+    public void setAngle(double rad) {
+        double angle = MathUtil.clamp(rad, ShooterConstants.minShooterAngle, ShooterConstants.maxShooterAngle);
+        armPidController.setReference(angle, ControlType.kPosition);
+    }
+
     public void arm_stop() {
         arm_leader.set(0);
-
-    
     }
 }
