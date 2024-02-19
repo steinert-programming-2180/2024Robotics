@@ -14,7 +14,7 @@ public class StartShooting extends Command{
     public void initialize(){}
 
     public void execute(){
-        shooter.arm_down();
+        shooter.shooter_forward();
     }
 
     public boolean isFinished(){
