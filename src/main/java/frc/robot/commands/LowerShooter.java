@@ -14,7 +14,7 @@ public class LowerShooter extends Command{
     public void initialize(){}
 
     public void execute(){
-        shooter.shooter_stop();
+        shooter.arm_down();
     }
 
     public boolean isFinished(){
