@@ -148,8 +148,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(conveyorForward).onFalse(conveyorStop);
     m_driverController.x().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_driverController.leftBumper().onTrue(raiseShooter);
-    m_driverController.rightBumper().onTrue(lowerShooter);
+    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(stopShooter);;
+    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(stopShooter);;
   
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
