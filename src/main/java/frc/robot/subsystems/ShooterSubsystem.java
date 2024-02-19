@@ -56,6 +56,12 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Angle", arm_encoder.getPosition());
+        if (arm_encoder.getPosition() > ShooterConstants.maxShooterAngle){
+            arm_leader.set(0);
+       }
+       if (arm_encoder.getPosition()  < ShooterConstants.minShooterAngle){
+            arm_leader.set(0);
+       }
     }
 
     public void shooter_forward() {
