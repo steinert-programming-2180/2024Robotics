@@ -84,6 +84,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_stop() {
-        arm_leader.set(0);
+        setAngle(arm_encoder.getPosition());
     }
 }
