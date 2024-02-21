@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -23,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AimAmp;
 import frc.robot.commands.AimSpeaker;
+import frc.robot.commands.ClimbBackward;
+import frc.robot.commands.ClimbForward;
 import frc.robot.commands.ConveyorBackward;
 import frc.robot.commands.ConveyorForward;
 import frc.robot.commands.ConveyorStop;
@@ -47,7 +50,9 @@ public class RobotContainer {
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
+  private final Climber m_cilmber=new Climber();
 
+  //teh robot's commands
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
   private final ConveyorForward conveyorForward = new ConveyorForward(m_conveyor);
   private final ConveyorStop conveyorStop = new ConveyorStop(m_conveyor);
@@ -64,6 +69,10 @@ public class RobotContainer {
   private final StopShooter stopShooter = new StopShooter(m_shooter);
   private final AimSpeaker aimSpeaker = new AimSpeaker(m_shooter);
   private final AimAmp aimAmp = new AimAmp(m_shooter);
+
+  private final ClimbForward climbForward=new ClimbForward(m_cilmber);
+  private final ClimbBackward climbBackward=new ClimbBackward(m_cilmber);
+  
 
   private final SendableChooser<Command> autoChooser;
 
@@ -148,8 +157,12 @@ public class RobotContainer {
     m_driverController.b().onTrue(conveyorForward).onFalse(conveyorStop);
     m_driverController.x().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(stopShooter);;
-    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(stopShooter);;
+    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(stopShooter);
+    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(stopShooter);
+
+    m_driverController.povLeft().onTrue(climbForward);
+    m_driverController.povRight().onTrue(climbBackward);
+    
   
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
