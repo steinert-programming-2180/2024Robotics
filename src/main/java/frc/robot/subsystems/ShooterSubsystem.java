@@ -36,6 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         arm_leader.restoreFactoryDefaults();
 
+        arm_leader.setInverted(true);
+
         armPidController = arm_leader.getPIDController();
 
         arm_encoder = arm_leader.getAbsoluteEncoder(Type.kDutyCycle);
@@ -51,11 +53,29 @@ public class ShooterSubsystem extends SubsystemBase {
         armPidController.setD(ShooterConstants.kArmD);
 
         arm_leader.burnFlash();
+
+        SmartDashboard.putNumber("Set Angle", arm_encoder.getPosition());
+        SmartDashboard.putNumber("Set P", armPidController.getP());
+        SmartDashboard.putNumber("Set I", armPidController.getI());
+        SmartDashboard.putNumber("Set D", armPidController.getD());
+
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Angle", arm_encoder.getPosition());
+        // if (armPidController.getP() != SmartDashboard.getNumber("Set P", 0)) {
+        //     armPidController.setP(SmartDashboard.getNumber("Set P", 0));
+        // }
+
+        // if (armPidController.getI() != SmartDashboard.getNumber("Set I", 0)) {
+        //     armPidController.setP(SmartDashboard.getNumber("Set I", 0));
+        // }
+
+        // if (armPidController.getD() != SmartDashboard.getNumber("Set D", 0)) {
+        //     armPidController.setD(SmartDashboard.getNumber("Set D", 0));
+        // }
+
+        // setAngle(SmartDashboard.getNumber("Set Angle", .8));
     }
 
     public void shooter_forward() {
@@ -84,6 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_stop() {
-        arm_leader.set(0);
+        SmartDashboard.putNumber("Set position to ", arm_encoder.getPosition());
+        setAngle(arm_encoder.getPosition());
     }
 }

@@ -106,7 +106,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     xBoxConfigureButtonBindings();
-    pS5ConfigureButtonBindings();
+    // pS5ConfigureButtonBindings();
 
     // Configure XBox default commands
     m_robotDrive.setDefaultCommand(
@@ -157,8 +157,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(conveyorForward).onFalse(conveyorStop);
     m_driverController.x().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(stopShooter);
-    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(stopShooter);
+    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(new InstantCommand(() -> m_shooter.arm_stop(), m_shooter));
+    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(new InstantCommand(() -> m_shooter.arm_stop(), m_shooter));
 
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
@@ -177,8 +177,8 @@ public class RobotContainer {
     m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
     m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_ps5driverController.R1().onTrue(raiseShooter).onFalse(stopShooter);
-    m_ps5driverController.L1().onTrue(lowerShooter).onFalse(stopShooter);
+    m_ps5driverController.R1().onTrue(raiseShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
+    m_ps5driverController.L1().onTrue(lowerShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
   
     m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
