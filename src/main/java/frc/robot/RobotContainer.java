@@ -163,7 +163,7 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
     
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.8), m_shooter));
+    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
   
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
