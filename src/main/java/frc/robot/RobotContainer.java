@@ -97,7 +97,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     xBoxConfigureButtonBindings();
-    pS5ConfigureButtonBindings();
+    // pS5ConfigureButtonBindings();
 
     // Configure XBox default commands
     m_robotDrive.setDefaultCommand(
@@ -148,8 +148,8 @@ public class RobotContainer {
     m_driverController.b().onTrue(conveyorForward).onFalse(conveyorStop);
     m_driverController.x().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(stopShooter);;
-    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(stopShooter);;
+    m_driverController.leftBumper().onTrue(raiseShooter).onFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
+    m_driverController.rightBumper().onTrue(lowerShooter).onFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));;
   
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }

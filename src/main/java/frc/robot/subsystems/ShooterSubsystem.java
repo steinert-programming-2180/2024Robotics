@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooter_leader;
@@ -32,9 +33,13 @@ public class ShooterSubsystem extends SubsystemBase {
         // articulation motor 
         arm_leader = new CANSparkMax(ShooterConstants.articulaitonMotorLeader, MotorType.kBrushless);
         arm_follower  = new CANSparkMax(ShooterConstants.articulaitonMotorFollower, MotorType.kBrushless);
+        
+        arm_leader.restoreFactoryDefaults();
+
         arm_follower.follow(arm_leader, false);
 
-        arm_leader.restoreFactoryDefaults();
+        arm_leader.setIdleMode(IdleMode.kCoast);
+        arm_follower.setIdleMode(IdleMode.kCoast);
 
         armPidController = arm_leader.getPIDController();
 
@@ -90,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_stop() {
+        // arm_leader.set(0);
         setAngle(arm_encoder.getPosition());
     }
 }
