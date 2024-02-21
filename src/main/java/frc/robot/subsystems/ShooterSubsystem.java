@@ -63,19 +63,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (armPidController.getP() != SmartDashboard.getNumber("Set P", 0)) {
-        //     armPidController.setP(SmartDashboard.getNumber("Set P", 0));
-        // }
-
-        // if (armPidController.getI() != SmartDashboard.getNumber("Set I", 0)) {
-        //     armPidController.setP(SmartDashboard.getNumber("Set I", 0));
-        // }
-
-        // if (armPidController.getD() != SmartDashboard.getNumber("Set D", 0)) {
-        //     armPidController.setD(SmartDashboard.getNumber("Set D", 0));
-        // }
-
-        // setAngle(SmartDashboard.getNumber("Set Angle", .8));
     }
 
     public void shooter_forward() {
