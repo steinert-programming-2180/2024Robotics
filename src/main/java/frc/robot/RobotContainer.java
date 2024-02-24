@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -223,9 +224,27 @@ public class RobotContainer {
 
       return new SequentialCommandGroup(
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        swerveControllerCommand,
-        swerveControllerCommand2,
+        new InstantCommand(() -> m_shooter.setAngle(.84)),
+        shootCommand,
+        new InstantCommand(() ->Timer.delay(0.25)),
+        conveyorForward,
+        new InstantCommand(() ->Timer.delay(0.5)),
+        stopShooter,
+        conveyorStop,
+        new InstantCommand(() ->Timer.delay(0.5)),
         intakeForward,
+        conveyorForward,
+        swerveControllerCommand,
+        new InstantCommand(() ->Timer.delay(0.5)),
+        intakeStop,
+        conveyorStop,
+        swerveControllerCommand2,
+        shootCommand,
+        new InstantCommand(() ->Timer.delay(0.25)),
+        conveyorForward,
+        new InstantCommand(() ->Timer.delay(0.5)),
+        stopShooter,
+        conveyorStop,
         new InstantCommand(() -> m_robotDrive.setX())
       );
   }
