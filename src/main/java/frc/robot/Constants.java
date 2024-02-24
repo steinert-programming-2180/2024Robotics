@@ -24,6 +24,10 @@ public final class Constants {
     public static final int leftFlyWheelMotor = 31;
     public static final int rightFlyWheelMotor = 32;
 
+    public static final double kShooterP = .7;
+    public static final double kShooterI = 0.00003;
+    public static final double kShooterD = 0;
+
     public static final int articulaitonMotorLeader = 40;
     public static final int articulaitonMotorFollower = 41;
 

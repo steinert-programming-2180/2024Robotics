@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -20,14 +21,33 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax arm_follower;
 
     private final SparkPIDController armPidController;
+    private final SparkPIDController shooterPidController;
 
     private final AbsoluteEncoder arm_encoder;
+    private final AbsoluteEncoder shooter_encoder;
+
 
     public ShooterSubsystem() {
         // Shooting Motors
         shooter_leader = new CANSparkMax(ShooterConstants.leftFlyWheelMotor, MotorType.kBrushless);
         shooter_follower  = new CANSparkMax(ShooterConstants.rightFlyWheelMotor, MotorType.kBrushless);
         shooter_follower.follow(shooter_leader, true);
+
+        shooter_leader.restoreFactoryDefaults();
+
+        shooterPidController = shooter_leader.getPIDController();
+
+        shooter_encoder = shooter_leader.getAbsoluteEncoder(Type.kDutyCycle);
+        shooterPidController.setFeedbackDevice(shooter_encoder);
+
+        shooter_encoder.setPositionConversionFactor(Math.PI * 2);
+        shooter_encoder.setVelocityConversionFactor(Math.PI * 2 / 60);
+
+        shooterPidController.setP(ShooterConstants.kShooterP);
+        shooterPidController.setI(ShooterConstants.kShooterI);
+        shooterPidController.setD(ShooterConstants.kShooterD);
+
+        shooter_leader.burnFlash();
         
         // articulation motor 
         arm_leader = new CANSparkMax(ShooterConstants.articulaitonMotorLeader, MotorType.kBrushless);
@@ -59,14 +79,20 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Set I", armPidController.getI());
         SmartDashboard.putNumber("Set D", armPidController.getD());
 
+        
     }
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Flywheel Speed", shooter_encoder.getPosition());
     }
 
     public void shooter_forward() {
         shooter_leader.set(-0.98);
+    }
+
+    public void shooter_ampforward(){
+        setspeed(0.15);
     }
 
     public void shooter_backwords() {
@@ -88,6 +114,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setAngle(double rad) {
         double angle = MathUtil.clamp(rad, ShooterConstants.minShooterAngle, ShooterConstants.maxShooterAngle);
         armPidController.setReference(angle, ControlType.kPosition);
+    }
+
+    public void setspeed(double rotations_velocity) {
+        shooterPidController.setReference(rotations_velocity, ControlType.kVelocity);
     }
 
     public void arm_stop() {

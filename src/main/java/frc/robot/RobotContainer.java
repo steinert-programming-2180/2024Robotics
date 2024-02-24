@@ -50,7 +50,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
-  private final Climber m_cilmber=new Climber();
+  private final Climber m_climber = new Climber();
 
   //teh robot's commands
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
@@ -70,14 +70,14 @@ public class RobotContainer {
   private final AimSpeaker aimSpeaker = new AimSpeaker(m_shooter);
   private final AimAmp aimAmp = new AimAmp(m_shooter);
 
-  private final ClimbForward climbForward=new ClimbForward(m_cilmber);
-  private final ClimbBackward climbBackward=new ClimbBackward(m_cilmber);
+  private final ClimbForward climbForward=new ClimbForward(m_climber);
+  private final ClimbBackward climbBackward=new ClimbBackward(m_climber);
   
 
   private final SendableChooser<Command> autoChooser;
 
   // The driver's controller
-  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(1);
   CommandPS5Controller m_ps5driverController = new CommandPS5Controller(OIConstants.kDriverControllerPort);
 
   /**
@@ -106,31 +106,31 @@ public class RobotContainer {
 
     // Configure the button bindings
     xBoxConfigureButtonBindings();
-    // pS5ConfigureButtonBindings();
+    pS5ConfigureButtonBindings();
 
     // Configure XBox default commands
-    m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
-    
-    // Configure PS5 default commands
     // m_robotDrive.setDefaultCommand(
     //     // The left stick controls translation of the robot.
     //     // Turning is controlled by the X axis of the right stick.
     //     new RunCommand(
     //         () -> m_robotDrive.drive(
-    //             -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+    //             -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
     //             true, true),
     //         m_robotDrive));
+    
+    // Configure PS5 default commands
+    m_robotDrive.setDefaultCommand(
+        // The left stick controls translation of the robot.
+        // Turning is controlled by the X axis of the right stick.
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
+                true, true),
+            m_robotDrive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -149,12 +149,13 @@ public class RobotContainer {
    */
   private void xBoxConfigureButtonBindings() {
 
-    m_driverController.y().onTrue(intakeForward).onFalse(intakeStop);
+    m_driverController.b().onTrue(intakeForward).onFalse(intakeStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
 
     m_driverController.rightTrigger(.3).onTrue(shootCommand).onFalse(stopShooting);
+    m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
 
-    m_driverController.b().onTrue(conveyorForward).onFalse(conveyorStop);
+    m_driverController.y().onTrue(conveyorForward).onFalse(conveyorStop);
     m_driverController.x().onTrue(conveyorBackward).onFalse(conveyorStop);
 
     m_driverController.leftBumper().onTrue(raiseShooter).onFalse(new InstantCommand(() -> m_shooter.arm_stop(), m_shooter));
@@ -164,24 +165,32 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(climbBackward);
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.setAngle(.87), m_shooter));
   
-    m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
 
   private void pS5ConfigureButtonBindings() {
 
-    m_ps5driverController.triangle().onTrue(intakeForward).onFalse(intakeStop);
-    m_ps5driverController.cross().onTrue(intakeReverse).onFalse(intakeStop);
+  //   m_ps5driverController.triangle().onTrue(intakeForward).onFalse(intakeStop);
+  //   m_ps5driverController.cross().onTrue(intakeReverse).onFalse(intakeStop);
 
-    m_ps5driverController.R2().onTrue(shootCommand).onFalse(stopShooting);
+  //   m_ps5driverController.R2().onTrue(shootCommand).onFalse(stopShooting);
 
-    m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
-    m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
+  //   m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
+  //   m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_ps5driverController.R1().onTrue(raiseShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
-    m_ps5driverController.L1().onTrue(lowerShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
+  //   m_ps5driverController.R1().onTrue(raiseShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
+  //   m_ps5driverController.L1().onTrue(lowerShooter).toggleOnFalse(new RunCommand(() -> m_shooter.arm_stop(), m_shooter));
+
+  //   m_ps5driverController.povUp().onTrue(climbForward);
+  //   m_ps5driverController.povDown().onTrue(climbBackward);
   
-    m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+  //   m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.setAngle(.85), m_shooter));
+  //   m_driverController.povRight().onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
+  //   //m_ps5driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+  
+  m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
   
   public Command getAutonomousCommand() {

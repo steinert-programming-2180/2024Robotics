@@ -57,6 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
+  // private SwerveModule[] modules;
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -78,11 +79,11 @@ public class DriveSubsystem extends SubsystemBase {
      AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getDriveWheelSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                    new PIDConstants(ModuleConstants.kDrivingP, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(ModuleConstants.kTurningP, 0.0, 0.0), // Rotation PID constants
                     4.5, // Max module speed, in m/s
                     0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -123,7 +124,6 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
-
   /**
    * Resets the odometry to the specified pose.
    *
@@ -141,19 +141,33 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
-  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds){
-    var states = DriveConstants.kDriveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
-
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, ModuleConstants.maxModuleSpeed);
-
-    setModuleStates(states);
+  public void driveRobotRelative(ChassisSpeeds speeds){
+    drive(speeds,false);
 }
 
-public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds){
-    ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation());
 
-    driveRobotRelative(robotRelative);
-}
+  public ChassisSpeeds getRobotRelativeSpeeds(ChassisSpeeds fieldRelativeSpeeds){
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  private void drive(ChassisSpeeds speeds, boolean fieldRelative){
+    if (fieldRelative){
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getPose().getRotation());
+    }
+    speeds = ChassisSpeeds.discretize(speeds, 10);
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    setModuleStates(swerveModuleStates);
+  }
+
+  private SwerveModuleState[] getModuleStates(){
+    return new SwerveModuleState[]{
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    };
+  }
 
   /**
    * Method to drive the robot using joystick info.
@@ -292,6 +306,10 @@ double WDM = Units.inchesToMeters(14.5);
   m_frontRightLocation,
   m_backLeftLocation,
   m_backRightLocation);
+
+  public ChassisSpeeds getRobotRelativeSpeeds(){
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+  }
 
   public ChassisSpeeds getDriveWheelSpeeds(){
     ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(
