@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -11,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooter_leader;
@@ -21,25 +21,42 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax arm_follower;
 
     private final SparkPIDController armPidController;
+    private final SparkPIDController shooterPidController;
 
     private final AbsoluteEncoder arm_encoder;
+    private final AbsoluteEncoder shooter_encoder;
+
 
     public ShooterSubsystem() {
         // Shooting Motors
         shooter_leader = new CANSparkMax(ShooterConstants.leftFlyWheelMotor, MotorType.kBrushless);
         shooter_follower  = new CANSparkMax(ShooterConstants.rightFlyWheelMotor, MotorType.kBrushless);
         shooter_follower.follow(shooter_leader, true);
+
+        shooter_leader.restoreFactoryDefaults();
+
+        shooterPidController = shooter_leader.getPIDController();
+
+        shooter_encoder = shooter_leader.getAbsoluteEncoder(Type.kDutyCycle);
+        shooterPidController.setFeedbackDevice(shooter_encoder);
+
+        shooter_encoder.setPositionConversionFactor(Math.PI * 2);
+        shooter_encoder.setVelocityConversionFactor(Math.PI * 2 / 60);
+
+        shooterPidController.setP(ShooterConstants.kShooterP);
+        shooterPidController.setI(ShooterConstants.kShooterI);
+        shooterPidController.setD(ShooterConstants.kShooterD);
+
+        shooter_leader.burnFlash();
         
         // articulation motor 
         arm_leader = new CANSparkMax(ShooterConstants.articulaitonMotorLeader, MotorType.kBrushless);
         arm_follower  = new CANSparkMax(ShooterConstants.articulaitonMotorFollower, MotorType.kBrushless);
-        
-        arm_leader.restoreFactoryDefaults();
-
         arm_follower.follow(arm_leader, false);
 
-        arm_leader.setIdleMode(IdleMode.kCoast);
-        arm_follower.setIdleMode(IdleMode.kCoast);
+        arm_leader.restoreFactoryDefaults();
+
+        arm_leader.setInverted(true);
 
         armPidController = arm_leader.getPIDController();
 
@@ -56,21 +73,26 @@ public class ShooterSubsystem extends SubsystemBase {
         armPidController.setD(ShooterConstants.kArmD);
 
         arm_leader.burnFlash();
+
+        SmartDashboard.putNumber("Set Angle", arm_encoder.getPosition());
+        SmartDashboard.putNumber("Set P", armPidController.getP());
+        SmartDashboard.putNumber("Set I", armPidController.getI());
+        SmartDashboard.putNumber("Set D", armPidController.getD());
+
+        
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Angle", arm_encoder.getPosition());
-        if (arm_encoder.getPosition() > ShooterConstants.maxShooterAngle){
-            arm_leader.set(0);
-       }
-       if (arm_encoder.getPosition()  < ShooterConstants.minShooterAngle){
-            arm_leader.set(0);
-       }
+        SmartDashboard.putNumber("Flywheel Speed", shooter_encoder.getPosition());
     }
 
     public void shooter_forward() {
         shooter_leader.set(-0.98);
+    }
+
+    public void shooter_ampforward(){
+        setspeed(0.15);
     }
 
     public void shooter_backwords() {
@@ -94,8 +116,12 @@ public class ShooterSubsystem extends SubsystemBase {
         armPidController.setReference(angle, ControlType.kPosition);
     }
 
+    public void setspeed(double rotations_velocity) {
+        shooterPidController.setReference(rotations_velocity, ControlType.kVelocity);
+    }
+
     public void arm_stop() {
-        // arm_leader.set(0);
+        SmartDashboard.putNumber("Set position to ", arm_encoder.getPosition());
         setAngle(arm_encoder.getPosition());
     }
 }
