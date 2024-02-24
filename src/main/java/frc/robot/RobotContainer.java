@@ -162,16 +162,16 @@ public class RobotContainer {
 
   private void pS5ConfigureButtonBindings() {
 
-    m_ps5driverController.triangle().onTrue(intakeForward).onFalse(intakeStop);
-    m_ps5driverController.cross().onTrue(intakeReverse).onFalse(intakeStop);
+    // m_ps5driverController.triangle().onTrue(intakeForward).onFalse(intakeStop);
+    // m_ps5driverController.cross().onTrue(intakeReverse).onFalse(intakeStop);
 
-    m_ps5driverController.R2().onTrue(shootCommand).onFalse(stopShooting);
+    // m_ps5driverController.R2().onTrue(shootCommand).onFalse(stopShooting);
 
-    m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
-    m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
+    // m_ps5driverController.circle().onTrue(conveyorForward).onFalse(conveyorStop);
+    // m_ps5driverController.square().onTrue(conveyorBackward).onFalse(conveyorStop);
 
-    m_ps5driverController.R1().onTrue(raiseShooter).onFalse(stopShooter);
-    m_ps5driverController.L1().onTrue(lowerShooter).onFalse(stopShooter);
+    // m_ps5driverController.R1().onTrue(raiseShooter).onFalse(stopShooter);
+    // m_ps5driverController.L1().onTrue(lowerShooter).onFalse(stopShooter);
   
     m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
