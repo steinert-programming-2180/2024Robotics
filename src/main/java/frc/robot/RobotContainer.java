@@ -31,8 +31,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -86,7 +84,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   // The driver's controller
-  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(1);
   CommandPS5Controller m_ps5driverController = new CommandPS5Controller(OIConstants.kDriverControllerPort);
 
   /**
@@ -182,21 +180,28 @@ public class RobotContainer {
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             .setKinematics(DriveConstants.kDriveKinematics);
 
+      TrajectoryConfig reversedtrajectoryConfig = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond, 
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+      reversedtrajectoryConfig.setReversed(true);
+
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)),
       List.of(
-          new Translation2d(0.75,0)
+          new Translation2d(1.25,0)
       ),
-      new Pose2d(1,0,Rotation2d.fromDegrees(180)),
+      new Pose2d(2,0,Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
     Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)),
       List.of(
-          new Translation2d(-0.75,0)
+          new Translation2d(-1.25,0)
       ),
-      new Pose2d(-1,0,Rotation2d.fromDegrees(180)),
-      trajectoryConfig);
+      new Pose2d(-2,0,Rotation2d.fromDegrees(0)),
+      reversedtrajectoryConfig);
 
       PIDController xController = ModuleConstants.PID_CONTROLLER;
       PIDController yController = ModuleConstants.PID_CONTROLLER;
@@ -222,29 +227,31 @@ public class RobotContainer {
         m_robotDrive::setModuleStates,
         m_robotDrive);
 
+
       return new SequentialCommandGroup(
-        new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        new InstantCommand(() -> m_shooter.setAngle(.84)),
-        shootCommand,
-        new InstantCommand(() ->Timer.delay(0.25)),
-        conveyorForward,
-        new InstantCommand(() ->Timer.delay(0.5)),
-        stopShooter,
-        conveyorStop,
-        new InstantCommand(() ->Timer.delay(0.5)),
-        intakeForward,
-        conveyorForward,
+        // new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+        // new InstantCommand(() -> m_shooter.setAngle(.84)),
+        // shootCommand,
+        // new InstantCommand(() ->Timer.delay(0.25)),
+        // conveyorForward,
+        // new InstantCommand(() ->Timer.delay(0.5)),
+        // stopShooter,
+        // conveyorStop,
+        // new InstantCommand(() ->Timer.delay(0.5)),
+        // intakeForward,
+        // conveyorForward,
         swerveControllerCommand,
+        new InstantCommand(() -> m_robotDrive.setX()),
         new InstantCommand(() ->Timer.delay(0.5)),
-        intakeStop,
-        conveyorStop,
+        // intakeStop,
+        // conveyorStop,
         swerveControllerCommand2,
-        shootCommand,
-        new InstantCommand(() ->Timer.delay(0.25)),
-        conveyorForward,
-        new InstantCommand(() ->Timer.delay(0.5)),
-        stopShooter,
-        conveyorStop,
+        // shootCommand,
+        // new InstantCommand(() ->Timer.delay(0.25)),
+        // conveyorForward,
+        // new InstantCommand(() ->Timer.delay(0.5)),
+        // stopShooter,
+        // conveyorStop,
         new InstantCommand(() -> m_robotDrive.setX())
       );
   }
