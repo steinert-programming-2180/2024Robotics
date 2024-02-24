@@ -48,6 +48,7 @@ public final class Constants {
       -(400*(Math.pow(distance, 2)+4.66128)/Math.pow(distance, 4)))
       +133.64/Math.pow(distance, 2))));
   }
+}
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
