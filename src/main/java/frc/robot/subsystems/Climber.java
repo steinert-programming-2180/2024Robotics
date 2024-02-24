@@ -12,12 +12,10 @@ public class Climber extends SubsystemBase {
     }
 
     public void forward(){
-        // System.out.println("penis");
         solenoid.set(Value.kForward);
     }
 
     public void backward(){
-        // System.out.println("cbt");
         solenoid.set(Value.kReverse);
     }
 }
