@@ -42,6 +42,11 @@ public final class Constants {
 
     // to do, set this to a specific value
     public static final double ampAngle = (1.1 - .55) / 2 + .55;
+
+    public static final double getImpericalAngle(double distance) {
+      return Math.acos(1 / (0.5*Math.sqrt(2*Math.sqrt((3228.51/Math.pow(distance, 4))
+      -(400*(Math.pow(distance, 2)+4.66128)/Math.pow(distance, 4)))
+      +133.64/Math.pow(distance, 2))));
   }
 
   public static final class DriveConstants {
