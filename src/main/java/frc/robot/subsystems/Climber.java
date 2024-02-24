@@ -8,7 +8,7 @@ public class Climber extends SubsystemBase {
     DoubleSolenoid solenoid;
 
     public Climber(){
-        solenoid=new DoubleSolenoid(PneumaticsModuleType.REVPH, 7, 8);
+        solenoid=new DoubleSolenoid(50, PneumaticsModuleType.REVPH, 7, 8);
     }
 
     public void forward(){
