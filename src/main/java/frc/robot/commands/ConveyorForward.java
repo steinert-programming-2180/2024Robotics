@@ -11,13 +11,16 @@ public class ConveyorForward extends Command{
         this.conveyor=conveyor;
     }
 
-    public void initialize(){}
+    public void initialize(){
+        
+    }
 
     public void execute(){
-        conveyor.forward();
+        conveyor.fastForward();
     }
 
     public boolean isFinished(){
         return false;
     }
+
 }

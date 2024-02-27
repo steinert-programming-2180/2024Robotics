@@ -56,6 +56,7 @@ import frc.robot.commands.RaiseShooter;
 import frc.robot.commands.StartShooting;
 import frc.robot.commands.StopShooter;
 import frc.robot.commands.StopShooting;
+import frc.robot.commands.StoppedConveyorForward;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -77,6 +78,7 @@ public class RobotContainer {
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
   private final ConveyorForward conveyorForward = new ConveyorForward(m_conveyor);
   private final ConveyorStop conveyorStop = new ConveyorStop(m_conveyor);
+  private final StoppedConveyorForward stoppedConveyorForward = new StoppedConveyorForward(m_conveyor);
 
   private final IntakeForward intakeForward = new IntakeForward(m_intake);
   private final IntakeBackward intakeReverse = new IntakeBackward(m_intake);
@@ -171,6 +173,7 @@ public class RobotContainer {
   private void xBoxConfigureButtonBindings() {
 
     m_driverController.b().onTrue(intakeForward).onFalse(intakeStop);
+    m_driverController.b().onTrue(stoppedConveyorForward).onFalse(conveyorStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
 
     m_driverController.rightTrigger(.3).onTrue(shootCommand).onFalse(stopShooting);
@@ -185,7 +188,7 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
     
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(ShooterConstants.getImpericalAngle(-Math.abs(limelightConstants.aprilTagX-limelight.getBotX()))), m_shooter));
     m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.setAngle(.87), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
@@ -210,6 +213,7 @@ public class RobotContainer {
   //   m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.setAngle(.85), m_shooter));
   //   m_driverController.povRight().onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
   //   //m_ps5driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+
   
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
