@@ -145,15 +145,15 @@ public class RobotContainer {
     
     // Configure PS5 default commands
     m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+    new RunCommand(
+        () -> m_robotDrive.drive(
+          -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
+          true, true),
+        m_robotDrive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -240,8 +240,8 @@ public class RobotContainer {
     }
 
     Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
-    new Translation2d(0, distance)),
-    new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
+      new Translation2d(0, distance)),
+      new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
     );
     
     SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
@@ -266,9 +266,9 @@ public class RobotContainer {
   }
   
   public Command getAutonomousCommand() {
-      return new Command() {
-      };
-    }
+    return new Command() {
+    };
+  }
 }
 
 
