@@ -35,8 +35,8 @@ public final class Constants {
     public static final double kArmI = 0.00003;
     public static final double kArmD = 0;
 
-    public static final double maxShooterAngle = 1.1;
-    public static final double minShooterAngle = 0.550;
+    public static final double maxShooterAngle = 1.233;
+    public static final double minShooterAngle = 0.656;
 
     public static final boolean inverShooterEncoder = false; // idk if I initally set zero while it was inverted.
 
@@ -44,9 +44,7 @@ public final class Constants {
     public static final double ampAngle = (1.1 - .55) / 2 + .55;
 
     public static final double getImpericalAngle(double distance) {
-      return Math.acos(1 / (0.5*Math.sqrt(2*Math.sqrt((3228.51/Math.pow(distance, 4))
-      -(400*(Math.pow(distance, 2)+4.66128)/Math.pow(distance, 4)))
-      +133.64/Math.pow(distance, 2))));
+      return Math.atan(2.156/distance);
   }
 }
 
@@ -181,5 +179,10 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class limelightConstants{
+    public static final double aprilTagY = 0.877443;
+    public static final double aprilTagX=-8.308975;
   }
 }

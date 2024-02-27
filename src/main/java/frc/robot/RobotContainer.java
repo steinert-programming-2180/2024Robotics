@@ -3,22 +3,41 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.List;
+
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.limelightConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -51,6 +70,8 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   private final Climber m_climber = new Climber();
+  private final LimelightSubsystem limelight=new LimelightSubsystem();
+  private final AHRS m_gyro = new AHRS();
 
   //teh robot's commands
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
@@ -192,11 +213,54 @@ public class RobotContainer {
   
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
+
+  public SequentialCommandGroup lineUp(){
+        PIDController xController=ModuleConstants.PID_CONTROLLER;
+        PIDController yController=ModuleConstants.PID_CONTROLLER;
+        ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
+
+        Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
+
+        TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+
+        double tagY=limelightConstants.aprilTagY;
+        double distance=0;
+        
+        if(limelight.getBotY()<=tagY){
+          distance=Math.abs(0.85-limelight.getBotY());
+        }
+
+        if(limelight.getBotY()>tagY){
+          distance=-Math.abs(0.85-limelight.getBotY());
+        }
+
+        Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
+            new Translation2d(0, distance)),
+            new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig);
+        
+        SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
+        trajectory,
+        m_robotDrive::getPose,
+        DriveConstants.kDriveKinematics,
+        xController,
+        yController,
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+
+        double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
+
+        double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
+
+        return new SequentialCommandGroup(new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), 
+        swerveCommand, new InstantCommand(() -> m_shooter.setAngle(angle),m_shooter));
+  }
   
   public Command getAutonomousCommand() {
-      return autoChooser.getSelected();
+      return new Command() {
+      };
     }
-
 }
 
 
