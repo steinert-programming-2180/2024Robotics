@@ -3,13 +3,26 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.List;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ConveyorSubsystem;
@@ -19,6 +32,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -37,6 +53,7 @@ import frc.robot.commands.RaiseShooter;
 import frc.robot.commands.StartShooting;
 import frc.robot.commands.StopShooter;
 import frc.robot.commands.StopShooting;
+import frc.robot.commands.StoppedConveyorForward;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -56,6 +73,7 @@ public class RobotContainer {
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
   private final ConveyorForward conveyorForward = new ConveyorForward(m_conveyor);
   private final ConveyorStop conveyorStop = new ConveyorStop(m_conveyor);
+  private final StoppedConveyorForward stoppedConveyorForward = new StoppedConveyorForward(m_conveyor);
 
   private final IntakeForward intakeForward = new IntakeForward(m_intake);
   private final IntakeBackward intakeReverse = new IntakeBackward(m_intake);
@@ -150,6 +168,7 @@ public class RobotContainer {
   private void xBoxConfigureButtonBindings() {
 
     m_driverController.b().onTrue(intakeForward).onFalse(intakeStop);
+    m_driverController.b().onTrue(stoppedConveyorForward).onFalse(conveyorStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
 
     m_driverController.rightTrigger(.3).onTrue(shootCommand).onFalse(stopShooting);
@@ -189,14 +208,104 @@ public class RobotContainer {
   //   m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.setAngle(.85), m_shooter));
   //   m_driverController.povRight().onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
   //   //m_ps5driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+
   
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
   
   public Command getAutonomousCommand() {
-      return autoChooser.getSelected();
-    }
+      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond, 
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
 
+      TrajectoryConfig reversedtrajectoryConfig = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond, 
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+      reversedtrajectoryConfig.setReversed(true);
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0,new Rotation2d(0)),
+      List.of(
+          new Translation2d(1.25,0)
+      ),
+      new Pose2d(2.45,0,Rotation2d.fromDegrees(-1)),
+      trajectoryConfig);
+
+    Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0,new Rotation2d(0)),
+      List.of(
+          new Translation2d(-1.5,0)
+      ),
+      new Pose2d(-3.5,0,Rotation2d.fromDegrees(0)),
+      reversedtrajectoryConfig);
+
+      PIDController xController = ModuleConstants.PID_CONTROLLER;
+      PIDController yController = ModuleConstants.PID_CONTROLLER;
+      ProfiledPIDController thetaController = ModuleConstants.TPID_CONTROLLER;
+      
+
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        trajectory, 
+        m_robotDrive::getPose, 
+        DriveConstants.kDriveKinematics, 
+        xController,
+        yController,
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+        
+      SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
+        trajectory2, 
+        m_robotDrive::getPose, 
+        DriveConstants.kDriveKinematics, 
+        xController,
+        yController,
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+
+      return new SequentialCommandGroup(
+        new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+        new InstantCommand(() -> m_shooter.shooter_forward()),
+        new InstantCommand(() -> m_shooter.setAngle(.83)),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_conveyor.forward()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_conveyor.stop()),
+        new InstantCommand(() -> m_shooter.setAngle(.67)),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_intake.forward()),
+        new InstantCommand(() -> m_conveyor.forward()),
+        new WaitCommand(0.5),
+        swerveControllerCommand2,
+        new InstantCommand(() -> m_robotDrive.setX()),
+        //stoppedConveyorForward,
+        new InstantCommand(() -> m_robotDrive.setX()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new InstantCommand(() -> m_conveyor.backwords()),
+        new WaitCommand(0.05),
+        new InstantCommand(() -> m_conveyor.stop()),
+        new InstantCommand(() -> m_intake.stop()),
+        swerveControllerCommand,
+        new InstantCommand(() -> m_robotDrive.setX()),
+        new InstantCommand(() -> m_shooter.setAngle(.75)),
+        new InstantCommand(() -> m_shooter.shooter_forward()),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> m_conveyor.forward()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_conveyor.stop()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_robotDrive.setX()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_shooter.shooter_stop())
+      );
+  }
 }
 
 

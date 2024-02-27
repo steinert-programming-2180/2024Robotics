@@ -14,6 +14,7 @@ public final class Constants {
   
   public static final class ConveyorConstants {
     public static final int conveyorMotorId = 11;
+    public static final int beamBrakeDioId = 0;
   }
 
   public static final class IntakeConstants {
@@ -125,7 +126,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
+    public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final PIDController PID_CONTROLLER = new PIDController(kDrivingP, kDrivingI, kDrivingD);
