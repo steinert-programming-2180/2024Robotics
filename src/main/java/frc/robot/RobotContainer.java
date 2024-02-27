@@ -145,15 +145,15 @@ public class RobotContainer {
     
     // Configure PS5 default commands
     m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+    new RunCommand(
+        () -> m_robotDrive.drive(
+          -MathUtil.applyDeadband(m_ps5driverController.getLeftY(), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
+          true, true),
+        m_robotDrive));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -189,7 +189,7 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(climbBackward);
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(ShooterConstants.getImpericalAngle(-Math.abs(limelightConstants.aprilTagX-limelight.getBotX()))), m_shooter));
-    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.setAngle(.87), m_shooter));
+    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
@@ -219,53 +219,58 @@ public class RobotContainer {
   m_ps5driverController.R2().onTrue(lineUp());
   }
 
-  public SequentialCommandGroup lineUp(){
-        PIDController xController=ModuleConstants.PID_CONTROLLER;
-        PIDController yController=ModuleConstants.PID_CONTROLLER;
-        ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
+  public SequentialCommandGroup lineUp() {
+    PIDController XYController=ModuleConstants.PID_CONTROLLER;
 
-        Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
+    ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
 
-        TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+    Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
 
-        double tagY=limelightConstants.aprilTagY;
-        double distance=0;
-        
-        if(limelight.getBotY()<=tagY){
-          distance=Math.abs(0.85-limelight.getBotY());
-        }
+    TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
+    AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
-        if(limelight.getBotY()>tagY){
-          distance=-Math.abs(0.85-limelight.getBotY());
-        }
+    double tagY=limelightConstants.aprilTagY;
+    double distance=0;
+    
+    if(limelight.getBotY()<=tagY){
+      distance=Math.abs(0.85-limelight.getBotY());
+    }
 
-        Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
-            new Translation2d(0, distance)),
-            new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig);
-        
-        SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
-        trajectory,
-        m_robotDrive::getPose,
-        DriveConstants.kDriveKinematics,
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    if(limelight.getBotY()>tagY){
+      distance=-Math.abs(0.85-limelight.getBotY());
+    }
 
-        double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
+    Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
+      new Translation2d(0, distance)),
+      new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
+    );
+    
+    SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
+      trajectory,
+      limelight::getPose,
+      DriveConstants.kDriveKinematics,
+      XYController,
+      XYController,
+      thetaController,
+      m_robotDrive::setModuleStates,
+      m_robotDrive,
+      limelight
+    );
 
-        double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
+    double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
 
-        return new SequentialCommandGroup(new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), 
-        swerveCommand, new InstantCommand(() -> m_shooter.setAngle(angle),m_shooter));
+    double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
+
+    return new SequentialCommandGroup(swerveCommand,
+      new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), 
+      new InstantCommand(() -> m_shooter.setAngle(angle), m_shooter)
+    );
   }
   
   public Command getAutonomousCommand() {
-      return new Command() {
-      };
-    }
+    return new Command() {
+    };
+  }
 }
 
 

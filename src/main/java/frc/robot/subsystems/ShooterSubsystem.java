@@ -78,8 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Set P", armPidController.getP());
         SmartDashboard.putNumber("Set I", armPidController.getI());
         SmartDashboard.putNumber("Set D", armPidController.getD());
-
         
+        SmartDashboard.putNumber("Speaker Angle", ShooterConstants.SpeakerAngle);
     }
 
     @Override
@@ -109,6 +109,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void arm_down() {
         arm_leader.set(.15);
+    }
+
+    public void aim_speaker() {
+        double angle = SmartDashboard.getNumber("Sppeaker Angle", 0);
+        setAngle(angle);
     }
 
     public void setAngle(double rad) {

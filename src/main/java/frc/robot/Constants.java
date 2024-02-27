@@ -46,8 +46,10 @@ public final class Constants {
 
     public static final double getImpericalAngle(double distance) {
       return Math.atan(2.156/distance);
+    }
+
+    public static double SpeakerAngle = .87;
   }
-}
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -133,7 +135,9 @@ public final class Constants {
     public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
+    
     public static final PIDController PID_CONTROLLER = new PIDController(kDrivingP, kDrivingI, kDrivingD);
+
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
@@ -143,6 +147,7 @@ public final class Constants {
     public static final double kTurningD = 0;
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    
     public static final ProfiledPIDController TPID_CONTROLLER = new ProfiledPIDController(kTurningP, kTurningI, kTurningD, new TrapezoidProfile.Constraints(
       kMaxModuleAngularSpeedRadiansPerSecond,
       kMaxModuleAngularAccelerationRadiansPerSecondSquared));
@@ -184,6 +189,6 @@ public final class Constants {
 
   public static final class limelightConstants{
     public static final double aprilTagY = 0.877443;
-    public static final double aprilTagX=-8.308975;
+    public static final double aprilTagX = -8.308975;
   }
 }
