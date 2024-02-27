@@ -218,9 +218,9 @@ public class RobotContainer {
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
 
-  public SequentialCommandGroup lineUp(){
-    PIDController xController=ModuleConstants.PID_CONTROLLER;
-    PIDController yController=ModuleConstants.PID_CONTROLLER;
+  public SequentialCommandGroup lineUp() {
+    PIDController XYController=ModuleConstants.PID_CONTROLLER;
+
     ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
 
     Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
@@ -246,13 +246,14 @@ public class RobotContainer {
     
     SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
       trajectory,
-      m_robotDrive::getPose,
+      limelight::getPose,
       DriveConstants.kDriveKinematics,
-      xController,
-      yController,
+      XYController,
+      XYController,
       thetaController,
       m_robotDrive::setModuleStates,
-      m_robotDrive
+      m_robotDrive,
+      limelight
     );
 
     double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());

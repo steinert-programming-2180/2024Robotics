@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.DoubleArrayTopic;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -15,6 +15,10 @@ public class LimelightSubsystem extends SubsystemBase {
     public LimelightSubsystem() {
         limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_botPos = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
+    }
+
+    public Pose2d getPose() {
+        return new Pose2d(getBotX(), getBotY(), new Rotation2d(getAngle()));
     }
 
     public double getBotX(){

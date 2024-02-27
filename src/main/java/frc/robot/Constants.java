@@ -135,7 +135,9 @@ public final class Constants {
     public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
+    
     public static final PIDController PID_CONTROLLER = new PIDController(kDrivingP, kDrivingI, kDrivingD);
+
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
@@ -145,6 +147,7 @@ public final class Constants {
     public static final double kTurningD = 0;
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+    
     public static final ProfiledPIDController TPID_CONTROLLER = new ProfiledPIDController(kTurningP, kTurningI, kTurningD, new TrapezoidProfile.Constraints(
       kMaxModuleAngularSpeedRadiansPerSecond,
       kMaxModuleAngularAccelerationRadiansPerSecondSquared));

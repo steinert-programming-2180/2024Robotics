@@ -113,7 +113,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void aim_speaker() {
         double angle = SmartDashboard.getNumber("Sppeaker Angle", 0);
-        setAngle(MathUtil.clamp(angle, ShooterConstants.minShooterAngle, ShooterConstants.maxShooterAngle));
+        setAngle(angle);
     }
 
     public void setAngle(double rad) {
