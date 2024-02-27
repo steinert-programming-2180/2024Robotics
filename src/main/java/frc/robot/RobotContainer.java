@@ -216,6 +216,7 @@ public class RobotContainer {
 
   
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+  m_ps5driverController.R2().onTrue(lineUp());
   }
 
   public SequentialCommandGroup lineUp(){
