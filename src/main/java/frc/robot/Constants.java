@@ -46,8 +46,10 @@ public final class Constants {
 
     public static final double getImpericalAngle(double distance) {
       return Math.atan(2.156/distance);
+    }
+
+    public static double SpeakerAngle = .87;
   }
-}
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of

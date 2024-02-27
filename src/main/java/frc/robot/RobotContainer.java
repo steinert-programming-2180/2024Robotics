@@ -189,7 +189,7 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(climbBackward);
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(ShooterConstants.getImpericalAngle(-Math.abs(limelightConstants.aprilTagX-limelight.getBotX()))), m_shooter));
-    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.setAngle(.87), m_shooter));
+    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
@@ -240,9 +240,9 @@ public class RobotContainer {
     }
 
     Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
-      new Translation2d(0, distance)),
-      new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
-      );
+    new Translation2d(0, distance)),
+    new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
+    );
     
     SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
       trajectory,

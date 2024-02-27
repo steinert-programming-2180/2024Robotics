@@ -27,13 +27,19 @@ public class LimelightSubsystem extends SubsystemBase {
         return botPose[1];
     }
 
+    public double getAngle() {
+        double[] botPose = m_botPos.getDoubleArray(new double[6]);
+        return botPose[5];
+    }
+
     public void periodic(){
         double[] botPose = m_botPos.getDoubleArray(new double[6]);
 
         if (botPose.length != 0) {
-            SmartDashboard.putNumber("x bot pose", botPose[0]);
-            SmartDashboard.putNumber("y bot pose", botPose[1]);
-            SmartDashboard.putNumber("z bot pose", botPose[2]);
+            SmartDashboard.putNumber("x bot pose", getBotX());
+            SmartDashboard.putNumber("y bot pose", getBotY());
+
+            SmartDashboard.putNumber("theta z bot pose", getBotX());
         }
     }
 }
