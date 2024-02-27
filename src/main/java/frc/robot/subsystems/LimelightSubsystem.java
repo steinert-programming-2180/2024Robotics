@@ -34,6 +34,6 @@ public class LimelightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("x bot pose", botPose[0]);
             SmartDashboard.putNumber("y bot pose", botPose[1]);
             SmartDashboard.putNumber("z bot pose", botPose[2]);
-          }
+        }
     }
 }

@@ -219,46 +219,50 @@ public class RobotContainer {
   }
 
   public SequentialCommandGroup lineUp(){
-        PIDController xController=ModuleConstants.PID_CONTROLLER;
-        PIDController yController=ModuleConstants.PID_CONTROLLER;
-        ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
+    PIDController xController=ModuleConstants.PID_CONTROLLER;
+    PIDController yController=ModuleConstants.PID_CONTROLLER;
+    ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
 
-        Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
+    Pose2d robotPose=new Pose2d(limelight.getBotX(), limelight.getBotY(), new Rotation2d(m_gyro.getAngle()));
 
-        TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared);
+    TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
+    AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
-        double tagY=limelightConstants.aprilTagY;
-        double distance=0;
-        
-        if(limelight.getBotY()<=tagY){
-          distance=Math.abs(0.85-limelight.getBotY());
-        }
+    double tagY=limelightConstants.aprilTagY;
+    double distance=0;
+    
+    if(limelight.getBotY()<=tagY){
+      distance=Math.abs(0.85-limelight.getBotY());
+    }
 
-        if(limelight.getBotY()>tagY){
-          distance=-Math.abs(0.85-limelight.getBotY());
-        }
+    if(limelight.getBotY()>tagY){
+      distance=-Math.abs(0.85-limelight.getBotY());
+    }
 
-        Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
-            new Translation2d(0, distance)),
-            new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig);
-        
-        SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
-        trajectory,
-        m_robotDrive::getPose,
-        DriveConstants.kDriveKinematics,
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    Trajectory trajectory=TrajectoryGenerator.generateTrajectory(robotPose, List.of(
+      new Translation2d(0, distance)),
+      new Pose2d(limelight.getBotX(), tagY, new Rotation2d(0)), trajectoryConfig
+      );
+    
+    SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
+      trajectory,
+      m_robotDrive::getPose,
+      DriveConstants.kDriveKinematics,
+      xController,
+      yController,
+      thetaController,
+      m_robotDrive::setModuleStates,
+      m_robotDrive
+    );
 
-        double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
+    double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
 
-        double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
+    double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
 
-        return new SequentialCommandGroup(new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), 
-        swerveCommand, new InstantCommand(() -> m_shooter.setAngle(angle),m_shooter));
+    return new SequentialCommandGroup(swerveCommand,
+      new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), 
+      new InstantCommand(() -> m_shooter.setAngle(angle), m_shooter)
+    );
   }
   
   public Command getAutonomousCommand() {
