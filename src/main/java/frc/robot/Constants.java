@@ -194,8 +194,8 @@ public final class Constants {
   }
 
   public static final class limelightConstants{
-    public static Pose2d redSpeaker = new Pose2d(-8.308, .877443, new Rotation2d());
-    public static Pose2d blueSpeaker = new Pose2d(8.308, .877443, new Rotation2d());
+    public static Pose2d redSpeaker = new Pose2d(-8.308, .877443, Rotation2d.fromDegrees(-180));
+    public static Pose2d blueSpeaker = new Pose2d(8.308, .877443, Rotation2d.fromDegrees(180));
 
     public static Pose2d getSpeakerShootingPose(boolean red) {
       if (red) {

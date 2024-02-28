@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,7 +19,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return new Pose2d(getBotX(), getBotY(), new Rotation2d(getAngle()));
+        return new Pose2d(getBotX(), getBotY(), Rotation2d.fromDegrees(getAngle()));
     }
 
     public double getBotX(){
