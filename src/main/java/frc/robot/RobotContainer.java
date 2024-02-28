@@ -183,7 +183,7 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
     
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
+    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.97), m_shooter));
     m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.setAngle(.87), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
@@ -231,7 +231,7 @@ public class RobotContainer {
       List.of(
           new Translation2d(1.25,0)
       ),
-      new Pose2d(2.45,0,Rotation2d.fromDegrees(-1)),
+      new Pose2d(2.45,0,Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
     Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
@@ -270,14 +270,14 @@ public class RobotContainer {
       return new SequentialCommandGroup(
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
         new InstantCommand(() -> m_shooter.shooter_forward()),
-        new InstantCommand(() -> m_shooter.setAngle(.83)),
+        new InstantCommand(() -> m_shooter.setAngle(.97)),
         new WaitCommand(1),
         new InstantCommand(() -> m_conveyor.forward()),
         new WaitCommand(1),
         new InstantCommand(() -> m_shooter.shooter_stop()),
         new WaitCommand(1),
         new InstantCommand(() -> m_conveyor.stop()),
-        new InstantCommand(() -> m_shooter.setAngle(.67)),
+        new InstantCommand(() -> m_shooter.setAngle(.77)),
         new WaitCommand(1),
         new InstantCommand(() -> m_intake.forward()),
         new InstantCommand(() -> m_conveyor.forward()),
@@ -294,7 +294,7 @@ public class RobotContainer {
         new InstantCommand(() -> m_intake.stop()),
         swerveControllerCommand,
         new InstantCommand(() -> m_robotDrive.setX()),
-        new InstantCommand(() -> m_shooter.setAngle(.75)),
+        new InstantCommand(() -> m_shooter.setAngle(.87)),
         new InstantCommand(() -> m_shooter.shooter_forward()),
         new WaitCommand(1.5),
         new InstantCommand(() -> m_conveyor.forward()),
