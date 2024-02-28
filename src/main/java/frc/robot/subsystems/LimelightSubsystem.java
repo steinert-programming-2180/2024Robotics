@@ -43,7 +43,7 @@ public class LimelightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("x bot pose", getBotX());
             SmartDashboard.putNumber("y bot pose", getBotY());
 
-            SmartDashboard.putNumber("theta z bot pose", getBotX());
+            SmartDashboard.putNumber("theta z bot pose", getAngle());
         }
     }
 }

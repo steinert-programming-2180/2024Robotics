@@ -4,7 +4,13 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -48,7 +54,7 @@ public final class Constants {
       return Math.atan(2.156/distance);
     }
 
-    public static double SpeakerAngle = .87;
+    public static double SpeakerAngle = .97;
   }
 
   public static final class DriveConstants {
@@ -188,7 +194,16 @@ public final class Constants {
   }
 
   public static final class limelightConstants{
-    public static final double aprilTagY = 0.877443;
-    public static final double aprilTagX = -8.308975;
+    public static Pose2d redSpeaker = new Pose2d(-8.308, .877443, new Rotation2d());
+    public static Pose2d blueSpeaker = new Pose2d(8.308, .877443, new Rotation2d());
+
+    public static Pose2d getSpeakerShootingPose(boolean red) {
+      if (red) {
+        return redSpeaker.transformBy(new Transform2d(2, 0, new Rotation2d()));
+      }
+      return blueSpeaker.transformBy(new Transform2d(-2, 0, new Rotation2d()));
+    }
+
+    public double speakerHeight = 2.158;
   }
 }
