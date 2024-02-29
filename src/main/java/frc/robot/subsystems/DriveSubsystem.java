@@ -104,6 +104,10 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
+  public double get_angle() {
+    return m_gyro.getAngle();
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block

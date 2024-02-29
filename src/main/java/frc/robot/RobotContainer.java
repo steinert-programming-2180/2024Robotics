@@ -232,13 +232,13 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       robotPose,
       List.of(),
-      new Pose2d(-5, .877443, Rotation2d.fromDegrees(-180)),
+      new Pose2d(0.8, -5, Rotation2d.fromDegrees(180)),
       trajectoryConfig
     );
     
     SwerveControllerCommand swerveCommand=new SwerveControllerCommand(
       trajectory,
-      limelight::getPose,
+      m_robotDrive::getPose,
       DriveConstants.kDriveKinematics,
       XYController,
       XYController,
