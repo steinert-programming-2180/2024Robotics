@@ -189,7 +189,7 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(climbBackward);
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
-    m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
+    // m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
@@ -219,20 +219,20 @@ public class RobotContainer {
   m_ps5driverController.R2().onTrue(lineUp());
   }
 
-  public SequentialCommandGroup lineUp() {
+  public SwerveControllerCommand lineUp() {
     PIDController XYController=ModuleConstants.PID_CONTROLLER;
 
     ProfiledPIDController thetaController=ModuleConstants.TPID_CONTROLLER;
 
     Pose2d robotPose=limelight.getPose();
 
-    TrajectoryConfig trajectoryConfig=new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
     AutoConstants.kMaxAccelerationMetersPerSecondSquared);
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       robotPose,
       List.of(),
-      limelightConstants.getSpeakerShootingPose(true), 
+      new Pose2d(-5, .877443, Rotation2d.fromDegrees(-180)),
       trajectoryConfig
     );
     
@@ -248,13 +248,7 @@ public class RobotContainer {
       limelight
     );
 
-    // double distanceFromTag=-Math.abs(limelightConstants.aprilTagX-limelight.getBotX());
-    // double angle=ShooterConstants.getImpericalAngle(distanceFromTag);
-
-    return new SequentialCommandGroup(swerveCommand,
-      new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose()))
-      // new InstantCommand(() -> m_shooter.setAngle(angle), m_shooter)
-    );
+    return swerveCommand;
   }
   
   public Command getAutonomousCommand() {

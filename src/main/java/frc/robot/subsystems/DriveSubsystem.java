@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
@@ -114,6 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    SmartDashboard.putNumber("Gyro Heading", getHeading());
   }
 
   /**
@@ -294,7 +296,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
   }
-double WDM = Units.inchesToMeters(14.5);
+  double WDM = Units.inchesToMeters(14.5);
 
   Translation2d m_frontLeftLocation = new Translation2d(-WDM, WDM);
   Translation2d m_frontRightLocation = new Translation2d(WDM, WDM);

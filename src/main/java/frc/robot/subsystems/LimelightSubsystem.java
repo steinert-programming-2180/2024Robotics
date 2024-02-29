@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +14,11 @@ public class LimelightSubsystem extends SubsystemBase {
     NetworkTable limeLightTable;
     NetworkTableEntry m_botPos;
 
+    LinearFilter filterX = LinearFilter.movingAverage(10);
+    LinearFilter filterY = LinearFilter.movingAverage(10);
+    LinearFilter filterTheta = LinearFilter.movingAverage(10);
+
+
     public LimelightSubsystem() {
         limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_botPos = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
@@ -22,23 +28,27 @@ public class LimelightSubsystem extends SubsystemBase {
         return new Pose2d(getBotX(), getBotY(), Rotation2d.fromDegrees(getAngle()));
     }
 
-    public double getBotX(){
-        double[] botPose = m_botPos.getDoubleArray(new double[6]);
-        return botPose[0];
+    public Double getBotX(){
+        // double[] botPose = m_botPos.getDoubleArray(new double[6]);
+        // return round(botPose[0], 2);
+        return round(filterX.lastValue(), 2);
     }
 
-    public double getBotY(){
-        double[] botPose = m_botPos.getDoubleArray(new double[6]);
-        return botPose[1];
+    public Double getBotY(){
+        // double[] botPose = m_botPos.getDoubleArray(new double[6]);
+        // return round(botPose[1], 2);
+        return round(filterY.lastValue(), 2);
     }
 
-    public double getAngle() {
-        double[] botPose = m_botPos.getDoubleArray(new double[6]);
-        return botPose[5];
+    public Double getAngle() {
+        // double[] botPose = m_botPos.getDoubleArray(new double[6]);
+        // return botPose[5];
+        return round(filterTheta.lastValue(), 2);
     }
 
     public void periodic(){
         double[] botPose = m_botPos.getDoubleArray(new double[6]);
+        double x = filterX.calculate(botPose[0]), y = filterY.calculate(botPose[1]), theta = filterTheta.calculate(botPose[5]);
 
         if (botPose.length != 0) {
             SmartDashboard.putNumber("x bot pose", getBotX());
@@ -46,5 +56,14 @@ public class LimelightSubsystem extends SubsystemBase {
 
             SmartDashboard.putNumber("theta z bot pose", getAngle());
         }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+        
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

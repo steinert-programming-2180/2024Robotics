@@ -194,14 +194,14 @@ public final class Constants {
   }
 
   public static final class limelightConstants{
-    public static Pose2d redSpeaker = new Pose2d(-8.308, .877443, Rotation2d.fromDegrees(-180));
-    public static Pose2d blueSpeaker = new Pose2d(8.308, .877443, Rotation2d.fromDegrees(180));
+    public static Pose2d redSpeaker = new Pose2d(8.308, .877443, Rotation2d.fromDegrees(180));
+    public static Pose2d blueSpeaker = new Pose2d(-8.308, .877443, Rotation2d.fromDegrees(-180));
 
     public static Pose2d getSpeakerShootingPose(boolean red) {
       if (red) {
-        return redSpeaker.transformBy(new Transform2d(2, 0, new Rotation2d()));
+        return redSpeaker.transformBy(new Transform2d(-2, 0, new Rotation2d()));
       }
-      return blueSpeaker.transformBy(new Transform2d(-2, 0, new Rotation2d()));
+      return blueSpeaker.transformBy(new Transform2d(2, 0, new Rotation2d()));
     }
 
     public double speakerHeight = 2.158;
