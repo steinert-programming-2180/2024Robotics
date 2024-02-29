@@ -51,6 +51,7 @@ import frc.robot.commands.ConveyorStop;
 import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.IntakeStop;
+import frc.robot.commands.LockOn;
 import frc.robot.commands.LowerShooter;
 import frc.robot.commands.RaiseShooter;
 import frc.robot.commands.StartShooting;
@@ -95,6 +96,8 @@ public class RobotContainer {
 
   private final ClimbForward climbForward=new ClimbForward(m_climber);
   private final ClimbBackward climbBackward=new ClimbBackward(m_climber);
+
+  private final LockOn lockOn = new LockOn(m_robotDrive, limelight);
   
 
   private final SendableChooser<Command> autoChooser;
@@ -214,9 +217,9 @@ public class RobotContainer {
   //   m_driverController.povRight().onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
   //   //m_ps5driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
 
-  
+  m_ps5driverController.R1().onTrue(lockOn).onFalse(new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true, true), m_robotDrive));
   m_ps5driverController.L2().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-  m_ps5driverController.R2().onTrue(lineUp());
+  //m_ps5driverController.R2().onTrue(lineUp());
   }
 
   public SwerveControllerCommand lineUp() {

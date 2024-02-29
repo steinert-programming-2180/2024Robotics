@@ -16,6 +16,7 @@ public class LimelightSubsystem extends SubsystemBase {
     NetworkTable limeLightTable;
     NetworkTableEntry m_botPos;
     NetworkTableEntry json;
+    NetworkTableEntry tx;
 
     LinearFilter filterX = LinearFilter.movingAverage(10);
     LinearFilter filterY = LinearFilter.movingAverage(10);
@@ -25,6 +26,8 @@ public class LimelightSubsystem extends SubsystemBase {
     public LimelightSubsystem() {
         limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_botPos = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose");
+        limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+        tx = limeLightTable.getEntry("tx");
         // json = NetworkTableInstance.getDefault().getTable("limelight").getEntry("json");
     }
 
@@ -48,6 +51,10 @@ public class LimelightSubsystem extends SubsystemBase {
         double[] botPose = m_botPos.getDoubleArray(new double[6]);
         return botPose[5];
         // return round(filterTheta.lastValue(), 2);
+    }
+
+    public Double getTx() {
+        return tx.getDouble(0);   
     }
 
     public void periodic(){
