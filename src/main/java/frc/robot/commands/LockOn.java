@@ -17,7 +17,7 @@ public class LockOn extends Command {
     }
 
     public void execute() {
-           drive.drive(0, 0, MathUtil.clamp(llight.getTx() * -0.01, -.5, .5), true, true);
+           drive.drive(0, 0, MathUtil.clamp(llight.getTx() * -0.01, -.3, .3), true, true);
     }
 
     @Override
