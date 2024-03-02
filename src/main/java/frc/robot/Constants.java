@@ -38,7 +38,7 @@ public final class Constants {
     public static final int articulaitonMotorLeader = 40;
     public static final int articulaitonMotorFollower = 41;
 
-    public static final double kArmP = .7;
+    public static final double kArmP = .9;
     public static final double kArmI = 0.00003;
     public static final double kArmD = 0;
 
