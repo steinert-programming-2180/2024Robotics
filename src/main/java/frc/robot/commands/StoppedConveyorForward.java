@@ -27,8 +27,8 @@ public class StoppedConveyorForward extends Command{
     @Override
     public void end(boolean inturrept) {
         conveyor.stop();
-        //conveyor.backwords();
-        //Timer.delay(0.05);
-        //conveyor.stop();
+        conveyor.backwords();
+        Timer.delay(0.05);
+        conveyor.stop();
     }
 }
