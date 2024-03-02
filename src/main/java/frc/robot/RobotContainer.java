@@ -92,7 +92,7 @@ public class RobotContainer {
   private final RaiseShooter raiseShooter = new RaiseShooter(m_shooter);
   private final LowerShooter lowerShooter = new LowerShooter(m_shooter);
   private final StopShooter stopShooter = new StopShooter(m_shooter);
-  private final AimSpeaker aimSpeaker = new AimSpeaker(m_shooter);
+  private final AimSpeaker aimSpeaker = new AimSpeaker(m_shooter, limelight);
   private final AimAmp aimAmp = new AimAmp(m_shooter);
 
   private final ClimbForward climbForward=new ClimbForward(m_climber);

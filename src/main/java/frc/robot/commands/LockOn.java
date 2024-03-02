@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -17,7 +17,7 @@ public class LockOn extends Command {
     }
 
     public void execute() {
-           drive.drive(0, 0, MathUtil.clamp(llight.getTx() * -0.01, -.3, .3), true, true);
+        drive.drive(0, 0, MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.3, .3), true, true);
     }
 
     @Override

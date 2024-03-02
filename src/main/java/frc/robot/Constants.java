@@ -28,6 +28,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
+    public static final double lockOnP = -.01; 
+
     public static final int leftFlyWheelMotor = 31;
     public static final int rightFlyWheelMotor = 32;
 
@@ -199,9 +201,9 @@ public final class Constants {
 
     public static Pose2d getSpeakerShootingPose(boolean red) {
       if (red) {
-        return redSpeaker.transformBy(new Transform2d(-2, 0, new Rotation2d()));
+        return redSpeaker.plus(new Transform2d(-2, 0, new Rotation2d()));
       }
-      return blueSpeaker.transformBy(new Transform2d(2, 0, new Rotation2d()));
+      return blueSpeaker.plus(new Transform2d(2, 0, new Rotation2d()));
     }
 
     public double speakerHeight = 2.158;
