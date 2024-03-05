@@ -55,7 +55,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double distance = getDistanceToSpeaker();
         if (distance == 0) return 0;
 
-        return Math.asin(2.159 / distance);
+        return Math.asin((1.844 / distance ));
     }
 
     public double getDistanceToSpeaker() {
@@ -65,7 +65,7 @@ public class LimelightSubsystem extends SubsystemBase {
         if (index == -1) return 0;
 
         Pose3d target = results.targetingResults.targets_Fiducials[index].getTargetPose_CameraSpace();
-        target = target.plus(new Transform3d(new Translation3d(0,0, 2.159 - 1.451102), new Rotation3d()));
+        target = target.plus(new Transform3d(new Translation3d(0,0, 2.159 - 1.6), new Rotation3d()));
         
         return Math.sqrt(Math.pow(target.getX(), 2) + Math.pow(target.getY(), 2) + Math.pow(target.getZ(), 2));
     }
@@ -84,15 +84,14 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public void periodic(){
-        // double[] botPose = m_botPos.getDoubleArray(new double[6]);
-        // double x = filterX.calculate(botPose[0]), y = filterY.calculate(botPose[1]), theta = filterTheta.calculate(botPose[5]);
+        SmartDashboard.putNumber("x bot pose", getBotX());
+        SmartDashboard.putNumber("y bot pose", getBotY());
 
-        // if (botPose.length != 0) {
-            SmartDashboard.putNumber("x bot pose", getBotX());
-            SmartDashboard.putNumber("y bot pose", getBotY());
+        SmartDashboard.putNumber("theta z bot pose", getAngle());
 
-            SmartDashboard.putNumber("theta z bot pose", getAngle());
-        // }
+        SmartDashboard.putNumber("Distance to speaker", getDistanceToSpeaker());
+        SmartDashboard.putNumber("Speaker Angle", getSpeakerAngle());
+
     }
 
     public static double round(double value, int places) {

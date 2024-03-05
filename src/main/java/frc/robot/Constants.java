@@ -40,9 +40,9 @@ public final class Constants {
     public static final int articulaitonMotorLeader = 40;
     public static final int articulaitonMotorFollower = 41;
 
-    public static final double kArmP = .9;
-    public static final double kArmI = 0.00003;
-    public static final double kArmD = 0;
+    public static final double kArmP = 2;
+    public static final double kArmI = 0.00004;
+    public static final double kArmD = 1;
 
     public static final double maxShooterAngle = 1.233;
     public static final double minShooterAngle = 0.656;
@@ -206,6 +206,6 @@ public final class Constants {
       return blueSpeaker.plus(new Transform2d(2, 0, new Rotation2d()));
     }
 
-    public double speakerHeight = 2.158;
+    public double speakerHeight = 1.844;
   }
 }
