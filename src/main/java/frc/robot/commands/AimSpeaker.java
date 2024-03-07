@@ -17,13 +17,13 @@ public class AimSpeaker extends Command{
     public void initialize(){}
 
     public void execute(){
-        double angle = this.llight.getDistanceToSpeaker();
+        double angle = this.llight.getSpeakerAngle();
         if (angle == 0) return;
 
-        shooter.setAngle(angle);
+        shooter.setAngle(angle+0.2);
     }
     
     public boolean isFinished(){
-        return false;
+        return true;
     }
 }
