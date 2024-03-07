@@ -68,13 +68,12 @@ import frc.robot.commands.StoppedConveyorForward;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   private final Climber m_climber = new Climber();
   private final LimelightSubsystem limelight=new LimelightSubsystem();
-  private final AHRS m_gyro = new AHRS();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(limelight);
 
   //teh robot's commands
   private final ConveyorBackward conveyorBackward = new ConveyorBackward(m_conveyor);
@@ -158,12 +157,11 @@ public class RobotContainer {
           -MathUtil.applyDeadband(m_ps5driverController.getLeftX(), OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
           true, true),
-        m_robotDrive));
+        m_robotDrive)
+    );
 
     autoChooser = AutoBuilder.buildAutoChooser();
-
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
   }
 
   /**
@@ -193,7 +191,7 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
     
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
+    m_driverController.povUp().onTrue(aimSpeaker);
     // m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
   
     //m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));

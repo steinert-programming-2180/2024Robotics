@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -63,7 +65,11 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  private boolean isLockedOn = false;
   
+  private LimelightSubsystem llight;
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -76,32 +82,37 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
-     AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(ModuleConstants.kDrivingP, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(ModuleConstants.kTurningP, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+  public DriveSubsystem(LimelightSubsystem llight) {
+    this.llight = llight;
+    AutoBuilder.configureHolonomic(
+          this::getPose, // Robot pose supplier
+          this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+          new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                  new PIDConstants(ModuleConstants.kDrivingP, 0.0, 0.0), // Translation PID constants
+                  new PIDConstants(ModuleConstants.kTurningP, 0.0, 0.0), // Rotation PID constants
+                  4.5, // Max module speed, in m/s
+                  0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                  new ReplanningConfig() // Default path replanning config. See the API for the options here
+          ),
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
     );
+  }
+
+  public void toggleLockOn() {
+    this.isLockedOn = !this.isLockedOn;
   }
 
   public double get_angle() {
@@ -120,6 +131,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     SmartDashboard.putNumber("Gyro Heading", getHeading());
+    SmartDashboard.putBoolean("Is Locked On", isLockedOn);
   }
 
   /**
@@ -148,7 +160,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds){
-    drive(speeds,false);
+    drive(speeds, false);
 }
 
 
@@ -189,6 +201,10 @@ public class DriveSubsystem extends SubsystemBase {
     
     double xSpeedCommanded;
     double ySpeedCommanded;
+
+    if (isLockedOn && Math.abs(this.llight.getTx()) >= .5) {
+      rot = MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.3, .3);
+    }
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
