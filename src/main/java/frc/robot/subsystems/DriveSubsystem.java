@@ -147,6 +147,19 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+  public void setOdometryAngle(Pose2d pose, double theta) {
+    m_odometry.resetPosition(
+        Rotation2d.fromDegrees(theta),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        pose);
+  }
+  
+
   public void driveRobotRelative(ChassisSpeeds speeds){
     drive(speeds,false);
 }
@@ -290,7 +303,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
+    m_gyro.setAngleAdjustment(0);
     m_gyro.reset();
+  }
+
+  public void setHeading(double angle){
+    m_gyro.setAngleAdjustment(angle);
   }
   /**
    * Returns the heading of the robot.

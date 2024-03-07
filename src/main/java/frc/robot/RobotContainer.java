@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -112,7 +113,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
+    CameraServer.startAutomaticCapture();
     // Register Named Commands
     NamedCommands.registerCommand("conveyorBackward", conveyorBackward);
     NamedCommands.registerCommand("conveyorForward", conveyorForward);
@@ -283,8 +284,21 @@ public class RobotContainer {
       List.of(
           // new Translation2d(-1.5,0)
       ),
-      new Pose2d(-3.5,0,Rotation2d.fromDegrees(0)),
+      new Pose2d(-2,0,Rotation2d.fromDegrees(0)),
       reversedtrajectoryConfig);
+
+    Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0,new Rotation2d(-69)),
+      List.of(
+        new Translation2d(0.25,-0.1)
+      ),
+      new Pose2d(2.5,-1.08,Rotation2d.fromDegrees(0)),trajectoryConfig);
+
+    // Trajectory trajectory4 = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0,0,new Rotation2d(0)),
+    //   List.of(
+    //   ),
+    //   new Pose2d(0,0,Rotation2d.fromDegrees(-35)),trajectoryConfig);
 
       PIDController xController = ModuleConstants.PID_CONTROLLER;
       PIDController yController = ModuleConstants.PID_CONTROLLER;
@@ -311,49 +325,120 @@ public class RobotContainer {
         m_robotDrive::setModuleStates,
         m_robotDrive);
 
+      SwerveControllerCommand swerveControllerCommand3 = new SwerveControllerCommand(
+        trajectory3, 
+        m_robotDrive::getPose, 
+        DriveConstants.kDriveKinematics, 
+        xController,
+        yController,
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+
+      // SwerveControllerCommand swerveControllerCommand4 = new SwerveControllerCommand(
+      //   trajectory4, 
+      //   m_robotDrive::getPose, 
+      //   DriveConstants.kDriveKinematics, 
+      //   xController,
+      //   yController,
+      //   thetaController,
+      //   m_robotDrive::setModuleStates,
+      //   m_robotDrive);
+
+      
       return new SequentialCommandGroup(
+        new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        new InstantCommand(() -> m_shooter.shooter_forward()),
-        new InstantCommand(() -> m_shooter.setAngle(.99)),
-        new WaitCommand(1),
+        new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
         new InstantCommand(() -> m_conveyor.forward()),
-        new WaitCommand(1),
-        new InstantCommand(() -> m_shooter.shooter_stop()),
-        new WaitCommand(1),
-        new InstantCommand(() -> m_conveyor.stop()),
-        new InstantCommand(() -> m_shooter.setAngle(.74)),
-        new WaitCommand(1),
         new InstantCommand(() -> m_intake.forward()),
-        new InstantCommand(() -> m_conveyor.forward()),
-        new WaitCommand(0.5),
-        swerveControllerCommand2,
-        new InstantCommand(() -> m_robotDrive.setX()),
-        //stoppedConveyorForward,
-        new InstantCommand(() -> m_robotDrive.setX()),
+        swerveControllerCommand3,
         new WaitCommand(0.3),
-        new InstantCommand(() -> m_shooter.shooter_stop()),
-        new WaitCommand(1),
-        new InstantCommand(() -> m_conveyor.backwords()),
-        new WaitCommand(0.05),
         new InstantCommand(() -> m_conveyor.stop()),
         new InstantCommand(() -> m_intake.stop()),
-        new WaitCommand(0.3),
-        lockOn,
-        new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        swerveControllerCommand,
-        new InstantCommand(() -> m_robotDrive.setX()),
-        new WaitCommand(0.3),
-        new InstantCommand(() -> m_shooter.setAngle(.97)),
-        new WaitCommand(0.5),
-        lockOn2,
+        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0.3, true,true)),
+        new WaitCommand(0.25),
+        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true,true)),
         new InstantCommand(() -> m_shooter.shooter_forward()),
-        new WaitCommand(1.5),
+        new WaitCommand(0.25),
+        //lockOn,
+        new InstantCommand(() -> m_shooter.setAngle(.8)),
+        new WaitCommand(1),
         new InstantCommand(() -> m_conveyor.forward()),
-        new WaitCommand(3.5),
+        new WaitCommand(0.5),
         new InstantCommand(() -> m_conveyor.stop()),
         new InstantCommand(() -> m_shooter.shooter_stop())
+
+
+        // new InstantCommand(() -> m_robotDrive.setX()),
+        // new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+        // swerveControllerCommand2
+        // new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+        // new InstantCommand(() -> m_shooter.shooter_forward()),
+        // new InstantCommand(() -> m_shooter.setAngle(.99)),
+        // new WaitCommand(1),
+        // new InstantCommand(() -> m_conveyor.forward()),
+        // new WaitCommand(0.5),
+        // new InstantCommand(() -> m_shooter.shooter_stop()),
+        // new InstantCommand(() -> m_conveyor.stop()),
+        // new InstantCommand(() -> m_shooter.setAngle(.74)),
+        // new WaitCommand(1)
       );
   }
 }
 
+// Testing 2 Note Side Auto
+// new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
+//         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+//         new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new InstantCommand(() -> m_intake.forward()),
+//         swerveControllerCommand3,
+//         new WaitCommand(0.3),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_intake.stop())
 
+
+// Straight Back Auto 2 Note
+// return new SequentialCommandGroup(
+//         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+//         new InstantCommand(() -> m_shooter.shooter_forward()),
+//         new InstantCommand(() -> m_shooter.setAngle(.99)),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_shooter.shooter_stop()),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_shooter.setAngle(.74)),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_intake.forward()),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new WaitCommand(0.5),
+//         swerveControllerCommand2,
+//         new InstantCommand(() -> m_robotDrive.setX()),
+//         //stoppedConveyorForward,
+//         new InstantCommand(() -> m_robotDrive.setX()),
+//         new WaitCommand(0.3),
+//         new InstantCommand(() -> m_shooter.shooter_stop()),
+//         new WaitCommand(0.3),
+//         new InstantCommand(() -> m_conveyor.backwords()),
+//         new WaitCommand(0.05),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_intake.stop()),
+//         new WaitCommand(0.3),
+//         lockOn,
+//         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+//         swerveControllerCommand,
+//         new InstantCommand(() -> m_robotDrive.setX()),
+//         new WaitCommand(0.3),
+//         new InstantCommand(() -> m_shooter.setAngle(.97)),
+//         new WaitCommand(0.5),
+//         lockOn2,
+//         new InstantCommand(() -> m_shooter.shooter_forward()),
+//         new WaitCommand(0.5),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_shooter.shooter_stop())
+//       );
