@@ -21,7 +21,15 @@ public class StoppedConveyorForward extends Command{
     }
 
     public boolean isFinished(){
-        return conveyor.hasNote();
+        if (conveyor.hasNote()) {
+            conveyor.stop();
+            Timer.delay(0.05);
+            conveyor.backwords();
+            Timer.delay(0.05);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

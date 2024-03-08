@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    CameraServer.startAutomaticCapture(0);
+
   }
 
   @Override

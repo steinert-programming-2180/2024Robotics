@@ -114,23 +114,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
-    // Register Named Commands
-    NamedCommands.registerCommand("conveyorBackward", conveyorBackward);
-    NamedCommands.registerCommand("conveyorForward", conveyorForward);
-    NamedCommands.registerCommand("conveyorStop", conveyorStop);
-
-    NamedCommands.registerCommand("intakeForward", intakeForward);
-    NamedCommands.registerCommand("intakeReverse", intakeReverse);
-    NamedCommands.registerCommand("intakeStop", intakeStop);
-
-    NamedCommands.registerCommand("shootCommand", shootCommand);
-    NamedCommands.registerCommand("stopShooting", stopShooting);
-
-    NamedCommands.registerCommand("aimSpeaker", aimSpeaker);
-    NamedCommands.registerCommand("aimAmp", aimAmp);
-    NamedCommands.registerCommand("raiseShooter", raiseShooter);
-    NamedCommands.registerCommand("lowerShooter", lowerShooter);
-    NamedCommands.registerCommand("stopShooter", stopShooter);
 
 
     // Configure the button bindings
@@ -276,7 +259,7 @@ public class RobotContainer {
       List.of(
           // new Translation2d(1.25,0)
       ),
-      new Pose2d(3,0,Rotation2d.fromDegrees(0)),
+      new Pose2d(1.8,0,Rotation2d.fromDegrees(0)),
       trajectoryConfig);
 
     Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
@@ -347,27 +330,54 @@ public class RobotContainer {
 
       
       return new SequentialCommandGroup(
-        new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
-        new InstantCommand(() -> m_conveyor.forward()),
-        new InstantCommand(() -> m_intake.forward()),
-        swerveControllerCommand3,
-        new WaitCommand(0.3),
-        new InstantCommand(() -> m_conveyor.stop()),
-        new InstantCommand(() -> m_intake.stop()),
-        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0.3, true,true)),
-        new WaitCommand(0.25),
-        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true,true)),
         new InstantCommand(() -> m_shooter.shooter_forward()),
-        new WaitCommand(0.25),
-        //lockOn,
-        new InstantCommand(() -> m_shooter.setAngle(.8)),
+        new InstantCommand(() -> m_shooter.setAngle(1.02)),
         new WaitCommand(1),
         new InstantCommand(() -> m_conveyor.forward()),
         new WaitCommand(0.5),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new WaitCommand(0.5),
+        new InstantCommand(() -> m_shooter.slow_shooter_forward()),
+        new WaitCommand(0.5),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new WaitCommand(0.5),
         new InstantCommand(() -> m_conveyor.stop()),
-        new InstantCommand(() -> m_shooter.shooter_stop())
+        new InstantCommand(() -> m_shooter.setAngle(.74)),
+        new WaitCommand(0.5),
+        new InstantCommand(() -> m_intake.forward()),
+        new InstantCommand(() -> m_conveyor.forward()),
+        new WaitCommand(0.5),
+        swerveControllerCommand2,
+        new InstantCommand(() -> m_conveyor.stop(), m_conveyor),
+        new InstantCommand(() -> m_conveyor.backwords(), m_conveyor),
+        new WaitCommand(.05),
+        new InstantCommand(() -> m_conveyor.stop(), m_conveyor),      
+        new InstantCommand(() -> m_robotDrive.setX()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_conveyor.backwords()),
+        new WaitCommand(0.05),
+        new InstantCommand(() -> m_conveyor.stop()),
+        new InstantCommand(() -> m_intake.stop()),
+        new WaitCommand(0.3),
+        // lockOn,
+        new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+        swerveControllerCommand,
+        new InstantCommand(() -> m_robotDrive.setX()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_shooter.setAngle(1.02)),
+        new WaitCommand(0.5),
+        lockOn2,
+        new InstantCommand(() -> m_shooter.shooter_forward()),
+        new WaitCommand(0.75),
+        new InstantCommand(() -> m_conveyor.forward()),
+        new WaitCommand(1),
+        new InstantCommand(() -> m_conveyor.stop()),
+        new InstantCommand(() -> m_shooter.shooter_stop()),
+        new InstantCommand(() -> m_robotDrive.setHeading(180), m_robotDrive)
+      );
 
 
         // new InstantCommand(() -> m_robotDrive.setX()),
@@ -383,7 +393,6 @@ public class RobotContainer {
         // new InstantCommand(() -> m_conveyor.stop()),
         // new InstantCommand(() -> m_shooter.setAngle(.74)),
         // new WaitCommand(1)
-      );
   }
 }
 
@@ -397,6 +406,29 @@ public class RobotContainer {
 //         new WaitCommand(0.3),
 //         new InstantCommand(() -> m_conveyor.stop()),
 //         new InstantCommand(() -> m_intake.stop())
+
+//Testing 2 Note Side Auto
+// new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
+//         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+//         new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new InstantCommand(() -> m_intake.forward()),
+//         swerveControllerCommand3,
+//         new WaitCommand(0.3),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_intake.stop()),
+//         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0.3, true,true)),
+//         new WaitCommand(0.25),
+//         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true,true)),
+//         new InstantCommand(() -> m_shooter.shooter_forward()),
+//         new WaitCommand(0.25),
+//         //lockOn,
+//         new InstantCommand(() -> m_shooter.setAngle(.8)),
+//         new WaitCommand(1),
+//         new InstantCommand(() -> m_conveyor.forward()),
+//         new WaitCommand(0.5),
+//         new InstantCommand(() -> m_conveyor.stop()),
+//         new InstantCommand(() -> m_shooter.shooter_stop())
 
 
 // Straight Back Auto 2 Note

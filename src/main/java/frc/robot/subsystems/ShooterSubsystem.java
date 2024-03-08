@@ -91,12 +91,16 @@ public class ShooterSubsystem extends SubsystemBase {
         shooter_leader.set(0.98);
     }
 
+    public void slow_shooter_forward() {
+        shooter_leader.set(0.05);
+    }
+
     public void shooter_ampforward(){
         setspeed(0.15);
     }
 
     public void shooter_backwords() {
-        shooter_leader.set(-.15);
+        shooter_leader.set(-.1);
     }
 
     public void shooter_stop() {

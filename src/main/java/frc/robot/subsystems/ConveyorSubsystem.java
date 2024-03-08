@@ -22,7 +22,7 @@ public class ConveyorSubsystem extends SubsystemBase {
     }
 
     public void forward() {
-        m_motor.set(0.5);
+        m_motor.set(0.35);
     }
 
     public void fastForward(){
