@@ -176,6 +176,7 @@ public class RobotContainer {
 
     m_driverController.povLeft().onTrue(climbForward);
     m_driverController.povRight().onTrue(climbBackward);
+    m_driverController.povDown().onTrue(new InstantCommand(() -> m_conveyor.slowForward(), m_conveyor)).onFalse(new InstantCommand(() -> m_conveyor.stop()));
     
     m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(1.02), m_shooter));
     //m_driverController.povDown().onTrue(aimSpeaker);
@@ -334,7 +335,7 @@ public class RobotContainer {
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
         new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
         new InstantCommand(() -> m_shooter.shooter_forward()),
-        new InstantCommand(() -> m_shooter.setAngle(1.02)),
+        new InstantCommand(() -> m_shooter.setAngle(1.05)),
         new WaitCommand(2),
         new InstantCommand(() -> m_conveyor.forward()),
         new WaitCommand(0.5),
@@ -410,27 +411,6 @@ public class RobotContainer {
         thetaController,
         m_robotDrive::setModuleStates,
         m_robotDrive);
-
-      SwerveControllerCommand swerveControllerCommand3 = new SwerveControllerCommand(
-        trajectory3, 
-        m_robotDrive::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-      // SwerveControllerCommand swerveControllerCommand4 = new SwerveControllerCommand(
-      //   trajectory4, 
-      //   m_robotDrive::getPose, 
-      //   DriveConstants.kDriveKinematics, 
-      //   xController,
-      //   yController,
-      //   thetaController,
-      //   m_robotDrive::setModuleStates,
-      //   m_robotDrive);
-
       
       return new SequentialCommandGroup(
         new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
@@ -452,6 +432,7 @@ public class RobotContainer {
         new InstantCommand(() -> m_conveyor.forward()),
         new WaitCommand(0.5),
         swerveControllerCommand2,
+        new WaitCommand(0.5),
         new InstantCommand(() -> m_conveyor.stop(), m_conveyor),
         new InstantCommand(() -> m_conveyor.backwords(), m_conveyor),
         new WaitCommand(.05),
@@ -583,6 +564,44 @@ public class RobotContainer {
         new WaitCommand(0.5),
         new InstantCommand(() -> m_conveyor.stop())
       );
+  }
+
+
+  public Command sideAutoAndMoveBack() {
+    PIDController xController = ModuleConstants.PID_CONTROLLER;
+    PIDController yController = ModuleConstants.PID_CONTROLLER;
+    ProfiledPIDController thetaController = ModuleConstants.TPID_CONTROLLER;
+
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond - 2, 
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+      // TrajectoryConfig reversedtrajectoryConfig = new TrajectoryConfig(
+      //   AutoConstants.kMaxSpeedMetersPerSecond, 
+      //   AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+      //       .setKinematics(DriveConstants.kDriveKinematics);
+
+      // reversedtrajectoryConfig.setReversed(true);
+
+      Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0,new Rotation2d(-69)),
+      List.of(
+        new Translation2d(-1.5,.75)
+      ),
+      new Pose2d(-3,1.5,Rotation2d.fromDegrees(0)),trajectoryConfig);
+    
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        trajectory3, 
+        m_robotDrive::getPose, 
+        DriveConstants.kDriveKinematics, 
+        xController,
+        yController,
+        thetaController,
+        m_robotDrive::setModuleStates,
+        m_robotDrive);
+
+    return new SequentialCommandGroup(swerveControllerCommand);
   }
 }
 

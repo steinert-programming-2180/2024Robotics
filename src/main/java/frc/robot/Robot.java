@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
     
     autChooser.addOption("1 note auto", "one");
     autChooser.setDefaultOption("2 note auto", "two");
+    autChooser.setDefaultOption("move back", "curve back");
+
 
     SmartDashboard.putData("Choose Auto", autChooser);
   }
@@ -55,6 +57,9 @@ public class Robot extends TimedRobot {
       case "two":
         m_robotContainer.getTwoNoteAuto().schedule();
         break;
+      case "curve back":
+        m_robotContainer.sideAutoAndMoveBack().schedule();
+      break;
       default:
         break;
     }
