@@ -99,8 +99,8 @@ public class RobotContainer {
   private final ClimbForward climbForward=new ClimbForward(m_climber);
   private final ClimbBackward climbBackward=new ClimbBackward(m_climber);
 
-  private final LockOn lockOn = new LockOn(m_robotDrive, limelight);
-  private final LockOn lockOn2 = new LockOn(m_robotDrive, limelight);
+  private final LockOn lockOn = new LockOn(m_robotDrive, limelight, m_shooter);
+  private final LockOn lockOn2 = new LockOn(m_robotDrive, limelight, m_shooter);
   
 
   // private final SendableChooser<Command> autoChooser;
@@ -178,7 +178,7 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(climbBackward);
     m_driverController.povDown().onTrue(new InstantCommand(() -> m_conveyor.slowForward(), m_conveyor)).onFalse(new InstantCommand(() -> m_conveyor.stop()));
     
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(1.02), m_shooter));
+    m_driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
     //m_driverController.povDown().onTrue(aimSpeaker);
     // m_driverController.povDown().onTrue(new InstantCommand(() -> m_shooter.aim_speaker(), m_shooter));
   
@@ -207,6 +207,7 @@ public class RobotContainer {
 
   m_ps5driverController.R1().onTrue(lockOn).onFalse(new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true, true), m_robotDrive));
   m_ps5driverController.square().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+  m_ps5driverController.R2().onTrue(new InstantCommand(() -> m_shooter.setAngle(0.67), m_shooter));
   //m_ps5driverController.R2().onTrue(lineUp());
   }
 

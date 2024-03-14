@@ -73,7 +73,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public int canSeeSpeaker(LimelightResults results) {
         LimelightTarget_Fiducial[] fluids = results.targetingResults.targets_Fiducials;
         for (int i = 0; i < fluids.length; i++) {
-            if (fluids[i].fiducialID == 8) return i;
+            if (fluids[i].fiducialID == 4) return i;
         }
 
         return -1;
@@ -90,7 +90,7 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("theta z bot pose", getAngle());
 
         SmartDashboard.putNumber("Distance to speaker", getDistanceToSpeaker());
-        SmartDashboard.putNumber("Speaker Angle", getSpeakerAngle());
+        // SmartDashboard.putNumber("Speaker Angle", getSpeakerAngle());
 
     }
 

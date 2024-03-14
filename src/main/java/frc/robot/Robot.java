@@ -21,9 +21,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    pneumaticHub = new PneumaticHub();
-    compressor = new Compressor(50, PneumaticsModuleType.REVPH);
-    compressor.enableAnalog(115,120);
+    // pneumaticHub = new PneumaticHub();
+    // compressor = new Compressor(50, PneumaticsModuleType.REVPH);
+    // compressor.enableAnalog(115,120);
 
     autChooser = new SendableChooser<String>();
     

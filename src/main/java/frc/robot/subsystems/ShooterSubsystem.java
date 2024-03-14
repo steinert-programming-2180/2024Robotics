@@ -84,7 +84,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Flywheel Speed", shooter_encoder.getPosition());
+        SmartDashboard.putNumber("Flywheel Speed", shooter_encoder.getVelocity());
+        SmartDashboard.putNumber("current shooter angle", arm_encoder.getPosition());
     }
 
     public void shooter_forward() {
@@ -108,15 +109,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_up() {
-        arm_leader.set(-0.15);
+        arm_leader.set(-0.1);
     }
 
     public void arm_down() {
-        arm_leader.set(.15);
+        arm_leader.set(.05);
     }
 
     public void aim_speaker() {
-        double angle = SmartDashboard.getNumber("Speaker Angle", 1.01);
+        double angle = SmartDashboard.getNumber("Speaker Angle", 1.02);
         setAngle(angle);
     }
 

@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
 
 public final class Constants {
   
@@ -40,8 +41,8 @@ public final class Constants {
     public static final int articulaitonMotorLeader = 40;
     public static final int articulaitonMotorFollower = 41;
 
-    public static final double kArmP = 2;
-    public static final double kArmI = 0.00004;
+    public static final double kArmP = 3;
+    public static final double kArmI = 0.0001;
     public static final double kArmD = 1;
 
     public static final double maxShooterAngle = 1.233;
@@ -56,7 +57,7 @@ public final class Constants {
       return Math.atan(2.156/distance);
     }
 
-    public static double SpeakerAngle = .97;
+    public static double SpeakerAngle = 1.02;
   }
 
   public static final class DriveConstants {
@@ -207,5 +208,9 @@ public final class Constants {
     }
 
     public double speakerHeight = 1.844;
+
+    public static double calculateShooterAngle(double distance) {
+      return (-0.147 * distance) + 1.29;
+    }
   }
 }
