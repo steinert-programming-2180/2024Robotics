@@ -29,7 +29,7 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final double lockOnP = -.01; 
+    public static final double lockOnP = -.007; 
 
     public static final int leftFlyWheelMotor = 31;
     public static final int rightFlyWheelMotor = 32;
@@ -153,7 +153,7 @@ public final class Constants {
 
     public static final double kTurningP = 0.45;
     public static final double kTurningI = 0;
-    public static final double kTurningD = 0.00001;
+    public static final double kTurningD = 0.00002;
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
     
@@ -211,6 +211,10 @@ public final class Constants {
 
     public static double calculateShooterAngle(double distance) {
       return (-0.147 * distance) + 1.29;
+    }
+
+    public static double calculateShooterAngleQuad(double distance) {
+      return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.39);
     }
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -24,7 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkPIDController shooterPidController;
 
     private final AbsoluteEncoder arm_encoder;
-    private final AbsoluteEncoder shooter_encoder;
+    private final RelativeEncoder shooter_encoder;
 
 
     public ShooterSubsystem() {
@@ -37,8 +38,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterPidController = shooter_leader.getPIDController();
 
-        shooter_encoder = shooter_leader.getAbsoluteEncoder(Type.kDutyCycle);
+        shooter_encoder = shooter_leader.getEncoder();
         shooterPidController.setFeedbackDevice(shooter_encoder);
+
+        // shooterPidController.setSmartMotionAccelStrategy(null, 0)
 
         shooter_encoder.setPositionConversionFactor(Math.PI * 2);
         shooter_encoder.setVelocityConversionFactor(Math.PI * 2 / 60);
@@ -109,11 +112,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_up() {
-        arm_leader.set(-0.1);
+        arm_leader.set(-0.3);
     }
 
     public void arm_down() {
-        arm_leader.set(.05);
+        arm_leader.set(.3);
     }
 
     public void aim_speaker() {
@@ -128,6 +131,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setspeed(double rotations_velocity) {
         shooterPidController.setReference(rotations_velocity, ControlType.kVelocity);
+    }
+
+    public double getSpeed() {
+        return shooter_encoder.getVelocity();
     }
 
     public void arm_stop() {

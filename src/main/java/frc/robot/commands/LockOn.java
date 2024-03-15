@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.limelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -24,8 +26,8 @@ public class LockOn extends Command {
 
     public void execute() {
         timeout.start();
-        shooter.setAngle(limelightConstants.calculateShooterAngle(llight.getDistanceToSpeaker()));
-        drive.drive(0, 0, MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.3, .3), true, true);
+        shooter.setAngle(limelightConstants.calculateShooterAngleQuad(llight.getDistanceToSpeaker()));
+        drive.drive(0, 0, MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.5, .5), true, true);
     }
 
     @Override
@@ -36,6 +38,7 @@ public class LockOn extends Command {
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(llight.getTx()) <= .1) || timeout.get() >= 1.5;
+        // || timeout.get() >= 1.5
+        return (Math.abs(llight.getTx()) <= .05) || timeout.get() >= 0.75;
     }
 }

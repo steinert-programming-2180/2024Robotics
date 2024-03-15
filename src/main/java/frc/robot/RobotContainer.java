@@ -87,7 +87,7 @@ public class RobotContainer {
   private final IntakeBackward intakeReverse = new IntakeBackward(m_intake);
   private final IntakeStop intakeStop = new IntakeStop(m_intake);
 
-  private final StartShooting shootCommand = new StartShooting(m_shooter);
+  private final StartShooting shootCommand = new StartShooting(m_shooter, m_conveyor);
   private final StopShooting stopShooting = new StopShooting(m_shooter);
 
   private final RaiseShooter raiseShooter = new RaiseShooter(m_shooter);
@@ -165,7 +165,7 @@ public class RobotContainer {
     m_driverController.b().onTrue(stoppedConveyorForward).onFalse(conveyorStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
 
-    m_driverController.rightTrigger(.3).onTrue(shootCommand).onFalse(stopShooting);
+    m_driverController.rightTrigger(.3).onTrue(shootCommand).toggleOnFalse(stopShooting);
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
 
     m_driverController.y().onTrue(conveyorForward).onFalse(conveyorStop);
