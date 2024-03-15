@@ -27,7 +27,11 @@ public class LockOn extends Command {
     public void execute() {
         timeout.start();
         shooter.setAngle(limelightConstants.calculateShooterAngleQuad(llight.getDistanceToSpeaker()));
-        drive.drive(0, 0, MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.5, .5), true, true);
+        if (llight.getTx() == 0) {
+            end(true);
+        } else {
+            drive.drive(0, 0, MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.5, .5), true, true);
+        }
     }
 
     @Override
@@ -39,6 +43,6 @@ public class LockOn extends Command {
     @Override
     public boolean isFinished() {
         // || timeout.get() >= 1.5
-        return (Math.abs(llight.getTx()) <= .05) || timeout.get() >= 0.75;
+        return (Math.abs(llight.getTx()) <= .05) || timeout.get() >= 1;
     }
 }
