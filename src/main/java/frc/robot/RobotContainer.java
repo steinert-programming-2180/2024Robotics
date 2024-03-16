@@ -209,6 +209,7 @@ public class RobotContainer {
   //   //m_ps5driverController.povUp().onTrue(new InstantCommand(() -> m_shooter.setAngle(.84), m_shooter));
 
   m_ps5driverController.R1().onTrue(new SequentialCommandGroup(lockOn, shootCommand)).onFalse(new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true, true), m_robotDrive));
+  m_ps5driverController.L1().onTrue(lockOn2).onFalse(new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, true, true), m_robotDrive));
   m_ps5driverController.square().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   m_ps5driverController.R2().onTrue(new InstantCommand(() -> m_shooter.setAngle(0.67), m_shooter));
   //m_ps5driverController.R2().onTrue(lineUp());
