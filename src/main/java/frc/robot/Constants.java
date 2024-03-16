@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.WPIMathJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -82,6 +83,24 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     // Chassis Speed for Auto
     public static final ChassisSpeeds ZeroChassisSpeed = new ChassisSpeeds();
+
+    public static final class GyroOffset {
+
+      // Offsets (in meters) for non-centered NavX
+      public static final double gyroOffsetX = Units.inchesToMeters(-1.75); // -0.04445 m
+      public static final double gyroOffsetY = Units.inchesToMeters(10.25); // 0.26035 m
+
+      // return corrected angular rate due to offset
+      public static double getRobotRot(double rot) {
+        double translationalOffset = Math.atan2(gyroOffsetY, gyroOffsetX);
+        return rot / Math.sin(translationalOffset);
+      }
+
+      // return angle with reference to gyro
+      public static double getOffsetAngle(double angle) {
+        return angle - Math.atan2(gyroOffsetY, gyroOffsetX);
+      }
+    }
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;

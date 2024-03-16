@@ -28,6 +28,7 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.limelightConstants;
+import frc.robot.Constants.DriveConstants.GyroOffset;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -586,11 +587,11 @@ public class RobotContainer {
       // reversedtrajectoryConfig.setReversed(true);
 
       Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(-69)),
+      new Pose2d(0,0, new Rotation2d(GyroOffset.getOffsetAngle(-69))),
       List.of(
         new Translation2d(-1.5,.75)
       ),
-      new Pose2d(-3,1.5,Rotation2d.fromDegrees(0)),trajectoryConfig);
+      new Pose2d(-3,1.5,new Rotation2d(GyroOffset.getOffsetAngle(0))),trajectoryConfig);
     
       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
         trajectory3, 
