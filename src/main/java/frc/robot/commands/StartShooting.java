@@ -25,7 +25,9 @@ public class StartShooting extends Command{
         this.llight = llight;
     }
 
-    public void initialize(){}
+    public void initialize(){
+        
+    }
 
     public void execute() {
         if (llight.getTx() != 0) {
@@ -46,10 +48,16 @@ public class StartShooting extends Command{
                 this.shooter.shooter_stop();
             });
         }
+
+        if (!conveyorSubsystem.hasNote()) {
+            conveyorSubsystem.turnOffBlinkin();
+        }
     }
 
     public boolean isFinished(){
         // 
+        conveyorSubsystem.greenBlinkin();
         return (shooter.getSpeed() > 610) || llight.getTx() == 0;
+        
     }
 }

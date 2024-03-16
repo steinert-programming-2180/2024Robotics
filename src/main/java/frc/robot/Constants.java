@@ -100,6 +100,11 @@ public final class Constants {
       public static double getOffsetAngle(double angle) {
         return angle - Math.atan2(gyroOffsetY, gyroOffsetX);
       }
+
+      // return angle with reference to robot
+      public static double getRobotAngle(double angle) {
+        return angle + Math.atan2(gyroOffsetY, gyroOffsetX);
+      }
     }
 
     // Angular offsets of the modules relative to the chassis in radians
@@ -197,8 +202,8 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 6;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 6;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -233,7 +238,7 @@ public final class Constants {
     }
 
     public static double calculateShooterAngleQuad(double distance) {
-      return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.39);
+      return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.38);
     }
   }
 }

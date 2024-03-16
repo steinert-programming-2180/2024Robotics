@@ -48,21 +48,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    String selected = autChooser.getSelected();
+    // String selected = autChooser.getSelected();
     
-    switch (selected) {
-      case "one":
-        m_robotContainer.getOneNoteAuto().schedule();
-        break;
-      case "two":
-        m_robotContainer.getTwoNoteAuto().schedule();
-        break;
-      case "curve back":
-        m_robotContainer.sideAutoAndMoveBack().schedule();
-      break;
-      default:
-        break;
-    }
+    // switch (selected) {
+    //   case "one":
+    //     m_robotContainer.getOneNoteAuto().schedule();
+    //     break;
+    //   case "two":
+    //     m_robotContainer.getTwoNoteAuto().schedule();
+    //     break;
+    //   case "curve back":
+    //     m_robotContainer.sideAutoAndMoveBack().schedule();
+    //   break;
+    //   default:
+    //     break;
+    // }
 
   }
 

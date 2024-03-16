@@ -8,6 +8,7 @@ import java.util.List;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -104,7 +106,7 @@ public class RobotContainer {
   private final LockOn lockOn2 = new LockOn(m_robotDrive, limelight, m_shooter);
   
 
-  // private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(1);
@@ -145,9 +147,9 @@ public class RobotContainer {
           true, true),
         m_robotDrive));
 
-    // autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
 
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
   }
 
@@ -553,19 +555,21 @@ public class RobotContainer {
       //   m_robotDrive);
 
       
-      return new SequentialCommandGroup(
-        new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
-        new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
-        new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
-        new InstantCommand(() -> m_shooter.shooter_forward()),
-        new InstantCommand(() -> m_shooter.setAngle(1.02)),
-        new WaitCommand(2),
-        new InstantCommand(() -> m_conveyor.forward()),
-        new WaitCommand(0.5),
-        new InstantCommand(() -> m_shooter.shooter_stop()),
-        new WaitCommand(0.5),
-        new InstantCommand(() -> m_conveyor.stop())
-      );
+      // return new SequentialCommandGroup(
+      //   new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive),
+      //   new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())),
+      //   new InstantCommand(() -> m_robotDrive.setHeading(118), m_robotDrive),
+      //   new InstantCommand(() -> m_shooter.shooter_forward()),
+      //   new InstantCommand(() -> m_shooter.setAngle(1.02)),
+      //   new WaitCommand(2),
+      //   new InstantCommand(() -> m_conveyor.forward()),
+      //   new WaitCommand(0.5),
+      //   new InstantCommand(() -> m_shooter.shooter_stop()),
+      //   new WaitCommand(0.5),
+      //   new InstantCommand(() -> m_conveyor.stop())
+      // );
+
+      return new PathPlannerAuto("1Note");
   }
 
 
