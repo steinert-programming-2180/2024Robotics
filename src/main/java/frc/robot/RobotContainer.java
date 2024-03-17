@@ -570,7 +570,7 @@ public class RobotContainer {
       //   new InstantCommand(() -> m_conveyor.stop())
       // );
 
-      return new PathPlannerAuto("1Note");
+      return autoChooser.getSelected();
   }
 
 
@@ -608,7 +608,8 @@ public class RobotContainer {
         m_robotDrive::setModuleStates,
         m_robotDrive);
 
-    return new SequentialCommandGroup(swerveControllerCommand);
+    // return new SequentialCommandGroup(swerveControllerCommand);
+    return autoChooser.getSelected();
   }
 }
 

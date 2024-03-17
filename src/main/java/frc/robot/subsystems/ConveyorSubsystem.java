@@ -41,7 +41,7 @@ public class ConveyorSubsystem extends SubsystemBase {
     }
 
     public void fastForward(){
-        m_motor.set(0.85);
+        m_motor.set(1);
     }
 
     public void slowForward(){

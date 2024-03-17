@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(GyroOffset.getRobotAngle(m_gyro.getAngle())),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -85,8 +85,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD), // Translation PID constants
-                    new PIDConstants(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD), // Rotation PID constants
+                    new PIDConstants(ModuleConstants.kAutoDrivingP, ModuleConstants.kAutoDrivingI, ModuleConstants.kAutoDrivingD), // Translation PID constants
+                    new PIDConstants(ModuleConstants.kAutoTurningP, ModuleConstants.kAutoTurningI, ModuleConstants.kAutoTurningD), // Rotation PID constants
                     6, // Max module speed, in m/s
                     0.539, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -114,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(GyroOffset.getRobotAngle(m_gyro.getAngle())),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -139,7 +139,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(GyroOffset.getRobotAngle(m_gyro.getAngle())),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -151,7 +151,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setOdometryAngle(Pose2d pose, double theta) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(theta),
+        Rotation2d.fromDegrees(GyroOffset.getOffsetAngle(theta)),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),

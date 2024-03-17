@@ -28,10 +28,15 @@ public class LockOn extends Command {
     public void execute() {
         timeout.start();
         shooter.setAngle(limelightConstants.calculateShooterAngleQuad(llight.getDistanceToSpeaker()));
+        // shooter.setAngle(limelightConstants.calculateShooterAngle(llight.getDistanceToSpeaker()));
+
+
+        SmartDashboard.putNumber("tx", llight.getTx());
+
         if (llight.getTx() == 0) {
             end(true);
         } else {
-            double rot = MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.5, .5);
+            double rot = MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.7, .7);
             drive.drive(0, 0, GyroOffset.getRobotRot(rot), true, true);
         }
     }
@@ -45,6 +50,6 @@ public class LockOn extends Command {
     @Override
     public boolean isFinished() {
         // || timeout.get() >= 1.5
-        return (Math.abs(llight.getTx()) <= .05) || timeout.get() >= 1;
+        return (Math.abs(llight.getTx()) <= 1.2) && timeout.get() >= 1.0;
     }
 }

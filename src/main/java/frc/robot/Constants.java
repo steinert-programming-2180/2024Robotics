@@ -30,7 +30,7 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final double lockOnP = -.007; 
+    public static final double lockOnP = -.01; 
 
     public static final int leftFlyWheelMotor = 31;
     public static final int rightFlyWheelMotor = 32;
@@ -168,6 +168,10 @@ public final class Constants {
     public static final double kDrivingP = 0.1;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
+
+    public static final double kAutoDrivingP = 0.1;
+    public static final double kAutoDrivingI = 0;
+    public static final double kAutoDrivingD = 0;
     
     public static final PIDController PID_CONTROLLER = new PIDController(kDrivingP, kDrivingI, kDrivingD);
 
@@ -178,6 +182,11 @@ public final class Constants {
     public static final double kTurningP = 0.45;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0.00002;
+
+    public static final double kAutoTurningP = 0.0000001;
+    public static final double kAutoTurningI = 0;
+    public static final double kAutoTurningD = 0;
+
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
     
@@ -238,7 +247,7 @@ public final class Constants {
     }
 
     public static double calculateShooterAngleQuad(double distance) {
-      return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.38);
+      return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.36);
     }
   }
 }

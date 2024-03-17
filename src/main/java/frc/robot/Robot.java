@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Compressor;
@@ -17,6 +19,7 @@ public class Robot extends TimedRobot {
   private Compressor compressor;
   PneumaticHub pneumaticHub;
   private SendableChooser<String> autChooser;
+  private AutoBuilder autoBuilderChooser;
 
   @Override
   public void robotInit() {
@@ -26,6 +29,8 @@ public class Robot extends TimedRobot {
     // compressor.enableAnalog(115,120);
 
     autChooser = new SendableChooser<String>();
+    
+    autoBuilderChooser = new AutoBuilder();
     
     autChooser.addOption("1 note auto", "one");
     autChooser.setDefaultOption("2 note auto", "two");
@@ -48,6 +53,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // String selected = autChooser.getSelected();
     
     // switch (selected) {
@@ -64,10 +70,17 @@ public class Robot extends TimedRobot {
     //     break;
     // }
 
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
+
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+
+  }
 
   @Override
   public void teleopInit() {

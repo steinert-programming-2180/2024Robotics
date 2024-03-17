@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3,
-      "y": 5.55
-    },
-    "rotation": -178.60583533435258
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,7 +8,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "straightBack"
+            "pathName": "DoNothing"
           }
         }
       ]
