@@ -75,20 +75,22 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(26.5);
+
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+
     // Chassis Speed for Auto
     public static final ChassisSpeeds ZeroChassisSpeed = new ChassisSpeeds();
 
     public static final class GyroOffset {
 
       // Offsets (in meters) for non-centered NavX
-      public static final double gyroOffsetX = Units.inchesToMeters(-1.75); // -0.04445 m
-      public static final double gyroOffsetY = Units.inchesToMeters(10.25); // 0.26035 m
+      public static final double gyroOffsetX = Units.inchesToMeters(-3); // -0.04445 m
+      public static final double gyroOffsetY = Units.inchesToMeters(9); // 0.26035 m
 
       // return corrected angular rate due to offset
       public static double getRobotRot(double rot) {
@@ -135,10 +137,10 @@ public final class Constants {
     public static final int kDrivingMotorPinionTeeth = 14;
 
     // Max speed of a drive module in m/s
-    public static final double maxModuleSpeed = 3.8;
+    public static final double maxModuleSpeed = 6.0;
 
     // Radius of the drive base in meters
-    public static final double driveBaseRadius = Units.inchesToMeters(15);
+    public static final double driveBaseRadius = Units.inchesToMeters(18.738);
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
