@@ -20,7 +20,7 @@ public class StoppedConveyorForward extends Command{
     }
 
     public void execute(){
-        conveyor.fastForward();
+        conveyor.forward();
     }
 
     public boolean isFinished(){

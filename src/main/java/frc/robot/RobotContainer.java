@@ -106,11 +106,11 @@ public class RobotContainer {
   private final LockOn lockOn2 = new LockOn(m_robotDrive, limelight, m_shooter);
   
 
-  private final SendableChooser<Command> autoChooser;
-
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(1);
   CommandPS5Controller m_ps5driverController = new CommandPS5Controller(OIConstants.kDriverControllerPort);
+
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -118,6 +118,13 @@ public class RobotContainer {
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
 
+    autoChooser = AutoBuilder.buildAutoChooser();
+    NamedCommands.registerCommand("LockOn", lockOn);
+    NamedCommands.registerCommand("IntakeForward", intakeForward);
+    NamedCommands.registerCommand("StoppedConveyorForward", stoppedConveyorForward);
+    NamedCommands.registerCommand("IntakeStop", intakeStop);
+
+    SmartDashboard.putData("Auto Chooser FR", autoChooser);
 
     // Configure the button bindings
     xBoxConfigureButtonBindings();
@@ -147,9 +154,7 @@ public class RobotContainer {
           true, true),
         m_robotDrive));
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
 
   }
 
@@ -469,81 +474,82 @@ public class RobotContainer {
       );
   }
   public Command getAutonomousCommand() {
-      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond, 
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(DriveConstants.kDriveKinematics);
+      return autoChooser.getSelected();
+      // TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
+      //   AutoConstants.kMaxSpeedMetersPerSecond, 
+      //   AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+      //       .setKinematics(DriveConstants.kDriveKinematics);
 
-      TrajectoryConfig reversedtrajectoryConfig = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond, 
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            .setKinematics(DriveConstants.kDriveKinematics);
+    //   TrajectoryConfig reversedtrajectoryConfig = new TrajectoryConfig(
+    //     AutoConstants.kMaxSpeedMetersPerSecond, 
+    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    //         .setKinematics(DriveConstants.kDriveKinematics);
 
-      reversedtrajectoryConfig.setReversed(true);
+    //   reversedtrajectoryConfig.setReversed(true);
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(0)),
-      List.of(
-          // new Translation2d(1.25,0)
-      ),
-      new Pose2d(1.8,0,Rotation2d.fromDegrees(0)),
-      trajectoryConfig);
-
-    Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(0)),
-      List.of(
-          // new Translation2d(-1.5,0)
-      ),
-      new Pose2d(-2,0,Rotation2d.fromDegrees(0)),
-      reversedtrajectoryConfig);
-
-    Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(-69)),
-      List.of(
-        new Translation2d(0.25,-0.1)
-      ),
-      new Pose2d(2.5,-1.08,Rotation2d.fromDegrees(0)),trajectoryConfig);
-
-    // Trajectory trajectory4 = TrajectoryGenerator.generateTrajectory(
+    // Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
     //   new Pose2d(0,0,new Rotation2d(0)),
     //   List.of(
+    //       // new Translation2d(1.25,0)
     //   ),
-    //   new Pose2d(0,0,Rotation2d.fromDegrees(-35)),trajectoryConfig);
+    //   new Pose2d(1.8,0,Rotation2d.fromDegrees(0)),
+    //   trajectoryConfig);
 
-      PIDController xController = ModuleConstants.PID_CONTROLLER;
-      PIDController yController = ModuleConstants.PID_CONTROLLER;
-      ProfiledPIDController thetaController = ModuleConstants.TPID_CONTROLLER;
+    // Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0,0,new Rotation2d(0)),
+    //   List.of(
+    //       // new Translation2d(-1.5,0)
+    //   ),
+    //   new Pose2d(-2,0,Rotation2d.fromDegrees(0)),
+    //   reversedtrajectoryConfig);
+
+    // Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
+    //   new Pose2d(0,0,new Rotation2d(-69)),
+    //   List.of(
+    //     new Translation2d(0.25,-0.1)
+    //   ),
+    //   new Pose2d(2.5,-1.08,Rotation2d.fromDegrees(0)),trajectoryConfig);
+
+    // // Trajectory trajectory4 = TrajectoryGenerator.generateTrajectory(
+    // //   new Pose2d(0,0,new Rotation2d(0)),
+    // //   List.of(
+    // //   ),
+    // //   new Pose2d(0,0,Rotation2d.fromDegrees(-35)),trajectoryConfig);
+
+    //   PIDController xController = ModuleConstants.PID_CONTROLLER;
+    //   PIDController yController = ModuleConstants.PID_CONTROLLER;
+    //   ProfiledPIDController thetaController = ModuleConstants.TPID_CONTROLLER;
       
 
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        trajectory, 
-        m_robotDrive::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    //   SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+    //     trajectory, 
+    //     m_robotDrive::getPose, 
+    //     DriveConstants.kDriveKinematics, 
+    //     xController,
+    //     yController,
+    //     thetaController,
+    //     m_robotDrive::setModuleStates,
+    //     m_robotDrive);
         
-      SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
-        trajectory2, 
-        m_robotDrive::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    //   SwerveControllerCommand swerveControllerCommand2 = new SwerveControllerCommand(
+    //     trajectory2, 
+    //     m_robotDrive::getPose, 
+    //     DriveConstants.kDriveKinematics, 
+    //     xController,
+    //     yController,
+    //     thetaController,
+    //     m_robotDrive::setModuleStates,
+    //     m_robotDrive);
 
-      SwerveControllerCommand swerveControllerCommand3 = new SwerveControllerCommand(
-        trajectory3, 
-        m_robotDrive::getPose, 
-        DriveConstants.kDriveKinematics, 
-        xController,
-        yController,
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    //   SwerveControllerCommand swerveControllerCommand3 = new SwerveControllerCommand(
+    //     trajectory3, 
+    //     m_robotDrive::getPose, 
+    //     DriveConstants.kDriveKinematics, 
+    //     xController,
+    //     yController,
+    //     thetaController,
+    //     m_robotDrive::setModuleStates,
+    //     m_robotDrive);
 
       // SwerveControllerCommand swerveControllerCommand4 = new SwerveControllerCommand(
       //   trajectory4, 
@@ -569,8 +575,9 @@ public class RobotContainer {
       //   new WaitCommand(0.5),
       //   new InstantCommand(() -> m_conveyor.stop())
       // );
-
-      return autoChooser.getSelected();
+      // return new Command() {
+        
+      // };
   }
 
 
@@ -609,8 +616,9 @@ public class RobotContainer {
         m_robotDrive);
 
     // return new SequentialCommandGroup(swerveControllerCommand);
-    return autoChooser.getSelected();
-  }
+  return new Command() {
+    
+  };  }
 }
 
 // Testing 2 Note Side Auto

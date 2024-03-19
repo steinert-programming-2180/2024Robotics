@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.894982565999367,
-        "y": 5.539225686154654
+        "x": 2.9026396514334944,
+        "y": 5.555088802483409
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.239175719435603,
-        "y": 5.293298118693242
+        "x": 2.2468328048697304,
+        "y": 5.309161235021997
       },
       "isLocked": false,
       "linkedName": "CenterNote"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "BlueAuto",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

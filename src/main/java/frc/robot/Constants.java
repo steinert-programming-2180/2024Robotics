@@ -89,8 +89,11 @@ public final class Constants {
     public static final class GyroOffset {
 
       // Offsets (in meters) for non-centered NavX
-      public static final double gyroOffsetX = Units.inchesToMeters(-3); // -0.04445 m
-      public static final double gyroOffsetY = Units.inchesToMeters(9); // 0.26035 m
+      // public static final double gyroOffsetX = Units.inchesToMeters(-3); // -0.04445 m
+      // public static final double gyroOffsetY = Units.inchesToMeters(9); // 0.26035 m
+
+      public static final double gyroOffsetX = -0.04445; // -0.04445 m
+      public static final double gyroOffsetY = 0.26035; // 0.26035 m
 
       // return corrected angular rate due to offset
       public static double getRobotRot(double rot) {
@@ -148,7 +151,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.0695;
+    public static final double kWheelDiameterMeters = 0.07;
     // 0.0695
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
@@ -171,9 +174,9 @@ public final class Constants {
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
 
-    public static final double kAutoDrivingP = 0.1;
+    public static final double kAutoDrivingP = 0.8;
     public static final double kAutoDrivingI = 0;
-    public static final double kAutoDrivingD = 0;
+    public static final double kAutoDrivingD = 1;
     
     public static final PIDController PID_CONTROLLER = new PIDController(kDrivingP, kDrivingI, kDrivingD);
 
@@ -185,7 +188,7 @@ public final class Constants {
     public static final double kTurningI = 0;
     public static final double kTurningD = 0.00002;
 
-    public static final double kAutoTurningP = 0.0000001;
+    public static final double kAutoTurningP = 0.0000000;
     public static final double kAutoTurningI = 0;
     public static final double kAutoTurningD = 0;
 
@@ -213,7 +216,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 6;
+    public static final double kMaxSpeedMetersPerSecond = 9;
     public static final double kMaxAccelerationMetersPerSecondSquared = 6;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;

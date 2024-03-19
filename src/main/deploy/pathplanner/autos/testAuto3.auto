@@ -8,13 +8,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "straightBack"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "sBack"
+            "pathName": "S"
           }
         }
       ]

@@ -18,8 +18,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Compressor compressor;
   PneumaticHub pneumaticHub;
-  private SendableChooser<String> autChooser;
-  private AutoBuilder autoBuilderChooser;
 
   @Override
   public void robotInit() {
@@ -27,17 +25,12 @@ public class Robot extends TimedRobot {
     // pneumaticHub = new PneumaticHub();
     // compressor = new Compressor(50, PneumaticsModuleType.REVPH);
     // compressor.enableAnalog(115,120);
-
-    autChooser = new SendableChooser<String>();
     
-    autoBuilderChooser = new AutoBuilder();
+    // autoBuilderChooser = new AutoBuilder();
     
-    autChooser.addOption("1 note auto", "one");
-    autChooser.setDefaultOption("2 note auto", "two");
-    autChooser.setDefaultOption("move back", "curve back");
-
-
-    SmartDashboard.putData("Choose Auto", autChooser);
+    // autChooser.addOption("1 note auto", "one");
+    // autChooser.setDefaultOption("2 note auto", "two");
+    // autChooser.setDefaultOption("move back", "curve back");
   }
 
   @Override
@@ -54,26 +47,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // String selected = autChooser.getSelected();
-    
-    // switch (selected) {
-    //   case "one":
-    //     m_robotContainer.getOneNoteAuto().schedule();
-    //     break;
-    //   case "two":
-    //     m_robotContainer.getTwoNoteAuto().schedule();
-    //     break;
-    //   case "curve back":
-    //     m_robotContainer.sideAutoAndMoveBack().schedule();
-    //   break;
-    //   default:
-    //     break;
-    // }
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-
   }
 
   @Override
