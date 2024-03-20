@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.7778081710009588,
-        "y": 4.992673062269202
+        "x": 1.5365255266887123,
+        "y": 4.965394695411359
       },
       "prevControl": {
-        "x": 1.7679412281901499,
-        "y": 4.440124264863915
+        "x": 1.5266585838779034,
+        "y": 4.412845898006071
       },
       "nextControl": {
-        "x": 1.7866165370845895,
-        "y": 5.485941562952511
+        "x": 1.545333892772343,
+        "y": 5.458663196094667
       },
       "isLocked": false,
       "linkedName": null
@@ -46,7 +46,31 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.35,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "LockOnArmAuto"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartShooting"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 2.5,

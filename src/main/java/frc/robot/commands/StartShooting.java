@@ -46,7 +46,10 @@ public class StartShooting extends Command{
             CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS).execute(() -> {
                 this.conveyorSubsystem.stop();
                 this.shooter.shooter_stop();
+                shooter.setAngle(0.66);
             });
+
+            
         }
 
         if (!conveyorSubsystem.hasNote()) {

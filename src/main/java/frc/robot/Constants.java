@@ -248,11 +248,15 @@ public final class Constants {
     public double speakerHeight = 1.844;
 
     public static double calculateShooterAngle(double distance) {
-      return (-0.147 * distance) + 1.29;
+      return (-0.152 * distance) + 1.25;
     }
 
     public static double calculateShooterAngleQuad(double distance) {
       return (0.0121*Math.pow(distance, 2) - (0.213*distance) + 1.36);
+    }
+
+    public static double calculateShooterAngleCubic(double distance) {
+      return ((-0.058 * Math.pow(distance, 3)) + (0.4769 * Math.pow(distance, 2)) - (1.4339 * distance) + 2.4069);
     }
   }
 }

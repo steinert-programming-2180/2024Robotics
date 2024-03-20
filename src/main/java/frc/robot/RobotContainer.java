@@ -57,6 +57,7 @@ import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.LockOn;
+import frc.robot.commands.LockOnArmAuto;
 import frc.robot.commands.LowerShooter;
 import frc.robot.commands.RaiseShooter;
 import frc.robot.commands.StartShooting;
@@ -91,6 +92,7 @@ public class RobotContainer {
   private final IntakeStop intakeStop = new IntakeStop(m_intake);
 
   private final StartShooting shootCommand = new StartShooting(m_shooter, m_conveyor, limelight);
+  private final StartShooting shootCommand2 = new StartShooting(m_shooter, m_conveyor, limelight);
   private final StopShooting stopShooting = new StopShooting(m_shooter);
 
   private final RaiseShooter raiseShooter = new RaiseShooter(m_shooter);
@@ -104,6 +106,8 @@ public class RobotContainer {
 
   private final LockOn lockOn = new LockOn(m_robotDrive, limelight, m_shooter);
   private final LockOn lockOn2 = new LockOn(m_robotDrive, limelight, m_shooter);
+
+  private final LockOnArmAuto lockOnArmAuto = new LockOnArmAuto(limelight, m_shooter);
   
 
   // The driver's controller
@@ -118,11 +122,14 @@ public class RobotContainer {
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    NamedCommands.registerCommand("LockOn", lockOn);
+    NamedCommands.registerCommand("LockOnArmAuto", lockOnArmAuto);
     NamedCommands.registerCommand("IntakeForward", intakeForward);
     NamedCommands.registerCommand("StoppedConveyorForward", stoppedConveyorForward);
     NamedCommands.registerCommand("IntakeStop", intakeStop);
+    NamedCommands.registerCommand("StartShooting", shootCommand);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    
 
     SmartDashboard.putData("Auto Chooser FR", autoChooser);
 
@@ -173,7 +180,7 @@ public class RobotContainer {
     m_driverController.b().onTrue(stoppedConveyorForward).onFalse(conveyorStop);
     m_driverController.a().onTrue(intakeReverse).onFalse(intakeStop);
 
-    m_driverController.rightTrigger(.3).onTrue(new InstantCommand(() -> m_shooter.shooter_forward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
+    m_driverController.rightTrigger(.3).onTrue(shootCommand2).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
     m_driverController.leftTrigger(.3).onTrue(new InstantCommand(() -> m_shooter.shooter_ampforward(), m_shooter)).onFalse(new InstantCommand(() -> m_shooter.shooter_stop()));
 
     m_driverController.y().onTrue(conveyorForward).onFalse(conveyorStop);

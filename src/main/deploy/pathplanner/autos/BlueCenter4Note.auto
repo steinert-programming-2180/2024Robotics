@@ -12,9 +12,39 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeForward"
+                }
+              },
               {
                 "type": "path",
                 "data": {
@@ -24,7 +54,20 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeForward"
+                  "name": "StoppedConveyorForward"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftNoteToCenterNoteBlue"
                 }
               },
               {
@@ -39,30 +82,29 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeStop"
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LockOn"
+            "name": "StartShooting"
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LeftNoteToCenterNoteBlue"
-                }
-              }
-            ]
+            "waitTime": 0.5
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -70,13 +112,31 @@
                 "data": {
                   "pathName": "CenterNoteToRightNoteBlue"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StoppedConveyorForward"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootFromRightNoteBlue"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeStop"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "The Good Ones",
   "choreoAuto": false
 }

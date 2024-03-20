@@ -26,9 +26,6 @@ public class StoppedConveyorForward extends Command{
     public boolean isFinished(){
         if (conveyor.hasNote()) {
             conveyor.stop();
-            Timer.delay(0.05);
-            conveyor.backwords();
-            Timer.delay(0.05);
             conveyor.flashBlinkin();
             return true;
         } else {
@@ -38,9 +35,6 @@ public class StoppedConveyorForward extends Command{
 
     @Override
     public void end(boolean inturrept) {
-        conveyor.stop();
-        conveyor.backwords();
-        Timer.delay(0.05);
         conveyor.stop();
     }
 }

@@ -3,7 +3,9 @@
   "robotLength": 0.762,
   "holonomicMode": true,
   "pathFolders": [],
-  "autoFolders": [],
+  "autoFolders": [
+    "The Good Ones"
+  ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 2.5,
   "defaultMaxAngVel": 540.0,

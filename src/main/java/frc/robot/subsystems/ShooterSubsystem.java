@@ -138,7 +138,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void arm_stop() {
-        SmartDashboard.putNumber("Set position to ", arm_encoder.getPosition());
+        SmartDashboard.getNumber("Set position to ", arm_encoder.getPosition());
         setAngle(arm_encoder.getPosition());
     }
 }

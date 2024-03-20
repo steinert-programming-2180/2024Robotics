@@ -12,15 +12,13 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class LockOn extends Command {
-    private DriveSubsystem drive;
+public class LockOnArmAuto extends Command {
     private LimelightSubsystem llight;
     private ShooterSubsystem shooter;
     Timer timeout = new Timer();
 
-    public LockOn(DriveSubsystem drive, LimelightSubsystem llight, ShooterSubsystem shooter) {
-        addRequirements(drive, llight, shooter);
-        this.drive = drive;
+    public LockOnArmAuto(LimelightSubsystem llight, ShooterSubsystem shooter) {
+        addRequirements(llight, shooter);
         this.llight = llight;
         this.shooter = shooter;
     }
@@ -29,28 +27,19 @@ public class LockOn extends Command {
         timeout.start();
         shooter.setAngle(limelightConstants.calculateShooterAngle(llight.getDistanceToSpeaker()));
         // shooter.setAngle(limelightConstants.calculateShooterAngle(llight.getDistanceToSpeaker()));
-
-
-        SmartDashboard.putNumber("tx", llight.getTx());
-
-        if (llight.getTx() == 0) {
-            end(true);
-        } else {
-            double rot = MathUtil.clamp(llight.getTx() * ShooterConstants.lockOnP, -.7, .7);
-            drive.drive(0, 0, GyroOffset.getRobotRot(rot), true, true);
-        }
+        
     }
 
     @Override
     public void end (boolean force) {
-        drive.drive(0, 0, 0, true, true);
+        // drive.drive(0, 0, 0, true, true);
         timeout.stop();
     }
 
     @Override
     public boolean isFinished() {
         // || timeout.get() >= 1.5
-        return (Math.abs(llight.getTx()) <= 1.2);
+        return true;
         //  && timeout.get() >= 1.0;
     }
 }

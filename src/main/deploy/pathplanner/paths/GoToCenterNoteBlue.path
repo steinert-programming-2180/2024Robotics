@@ -11,7 +11,7 @@
         "x": 2.3374413054104277,
         "y": 5.550936522700434
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "CenterStart"
     },
     {
@@ -24,7 +24,7 @@
         "y": 5.555088802483409
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "CenterNote"
     }
   ],

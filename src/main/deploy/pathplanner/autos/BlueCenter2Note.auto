@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.325730468864645,
-      "y": 5.562647359246215
+      "x": 1.3374413054104268,
+      "y": 5.550936522700434
     },
     "rotation": 0
   },
@@ -14,11 +14,29 @@
         {
           "type": "named",
           "data": {
-            "name": "LockOn"
+            "name": "LockOnArmAuto"
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -43,14 +61,38 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "LockOn"
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeStop"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "The Good Ones",
   "choreoAuto": false
 }

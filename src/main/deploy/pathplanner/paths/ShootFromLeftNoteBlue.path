@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.844614736305079,
-        "y": 4.133925300660873
+        "x": 2.649054998537956,
+        "y": 4.098792791023527
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.844614736305079,
-        "y": 4.133925300660873
+        "x": 1.2203329399526117,
+        "y": 3.9582627524741496
       },
       "isLocked": false,
-      "linkedName": "RedRightNote"
+      "linkedName": "LeftNote"
     },
     {
       "anchor": {
-        "x": 13.680663024664138,
-        "y": 5.550936522700434
+        "x": 2.649054998537956,
+        "y": 4.684334618312604
       },
       "prevControl": {
-        "x": 14.992276717791666,
-        "y": 5.808574926707628
+        "x": 1.649054998537956,
+        "y": 4.684334618312604
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RedCenterNote"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -45,9 +45,9 @@
               }
             },
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 1.0
+                "name": "StartShooting"
               }
             }
           ]

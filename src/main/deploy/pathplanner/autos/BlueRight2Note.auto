@@ -5,14 +5,26 @@
       "x": 0.7753211512129142,
       "y": 6.616622648366552
     },
-    "rotation": 62.44718842328216
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -37,20 +49,20 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "ShootFromRightNoteBlue"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LockOn"
+            "name": "IntakeStop"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "The Good Ones",
   "choreoAuto": false
 }
