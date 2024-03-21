@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.649054998537956,
-        "y": 4.098792791023527
+        "x": 1.8410072768790318,
+        "y": 5.555088802483409
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9455461987847067,
-        "y": 4.153982923350462
+        "x": 2.42666620082507,
+        "y": 5.555088802483409
       },
       "isLocked": false,
-      "linkedName": "LeftNote"
+      "linkedName": "LeftNoteShootPos"
     },
     {
       "anchor": {
-        "x": 1.5365255266887123,
-        "y": 4.965394695411359
-      },
-      "prevControl": {
-        "x": 1.5266585838779034,
-        "y": 4.412845898006071
-      },
-      "nextControl": {
-        "x": 1.545333892772343,
-        "y": 5.458663196094667
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.9026396514334944,
+        "x": 3.0355126045487455,
         "y": 5.555088802483409
       },
       "prevControl": {
-        "x": 1.9258123131630895,
-        "y": 5.594556573728532
+        "x": 1.9731536287868114,
+        "y": 5.555088802483409
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,31 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "LockOnArmAuto"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StartShooting"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 2.5,

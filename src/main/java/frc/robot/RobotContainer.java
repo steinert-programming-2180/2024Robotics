@@ -55,6 +55,7 @@ import frc.robot.commands.ConveyorForward;
 import frc.robot.commands.ConveyorStop;
 import frc.robot.commands.IntakeBackward;
 import frc.robot.commands.IntakeForward;
+import frc.robot.commands.IntakeForwardAuto;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.LockOn;
 import frc.robot.commands.LockOnArmAuto;
@@ -90,9 +91,10 @@ public class RobotContainer {
   private final IntakeForward intakeForward = new IntakeForward(m_intake);
   private final IntakeBackward intakeReverse = new IntakeBackward(m_intake);
   private final IntakeStop intakeStop = new IntakeStop(m_intake);
+  private final IntakeForwardAuto intakeForwardAuto = new IntakeForwardAuto(m_intake);
 
   private final StartShooting shootCommand = new StartShooting(m_shooter, m_conveyor, limelight);
-  private final StartShooting shootCommand2 = new StartShooting(m_shooter, m_conveyor, limelight);
+  private final StartShooting shootCommand2 = new StartShooting(m_shooter, m_conveyor, limelight, true);
   private final StopShooting stopShooting = new StopShooting(m_shooter);
 
   private final RaiseShooter raiseShooter = new RaiseShooter(m_shooter);
@@ -127,6 +129,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("StoppedConveyorForward", stoppedConveyorForward);
     NamedCommands.registerCommand("IntakeStop", intakeStop);
     NamedCommands.registerCommand("StartShooting", shootCommand);
+    NamedCommands.registerCommand("IntakeForwardAuto", intakeForwardAuto);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     
@@ -160,9 +163,6 @@ public class RobotContainer {
           -MathUtil.applyDeadband(m_ps5driverController.getRightX(), OIConstants.kDriveDeadband),
           true, true),
         m_robotDrive));
-
-    
-
   }
 
   /**

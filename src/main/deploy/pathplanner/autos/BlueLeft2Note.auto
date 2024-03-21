@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7753211512129142,
-      "y": 4.473539560488536
+      "x": 0.7518994781213513,
+      "y": 4.239322829572907
     },
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -18,25 +18,37 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "StartShooting"
           }
         },
         {
-          "type": "sequential",
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeForwardAuto"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftToLeftNoteBlue"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeForward"
+                  "pathName": "LeftToMiddleLeftNoteBlue"
                 }
               },
               {
@@ -49,9 +61,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "ShootFromLeftNoteBlue"
+            "pathName": "MiddleLeftToLeftNoteBlue"
           }
         },
         {

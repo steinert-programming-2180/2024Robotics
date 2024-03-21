@@ -32,23 +32,17 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeForward"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "GoToLeftNoteBlue"
+                  "name": "IntakeForwardAuto"
                 }
               },
               {
@@ -56,12 +50,60 @@
                 "data": {
                   "name": "StoppedConveyorForward"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoToLeftNoteBlue"
+                }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootFromLeftNoteBlue"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.4
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -75,8 +117,81 @@
                 "data": {
                   "name": "StoppedConveyorForward"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeForwardAuto"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LockOnArmAuto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeForwardAuto"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CenterNoteToRightNoteBlue"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootFromRightNoteBlue"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
           }
         },
         {
@@ -100,32 +215,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CenterNoteToRightNoteBlue"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "StoppedConveyorForward"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootFromRightNoteBlue"
+            "waitTime": 0.3
           }
         },
         {

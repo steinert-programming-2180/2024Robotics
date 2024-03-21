@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0355126045487455,
-        "y": 5.555088802483409
+        "x": 8.188280684692609,
+        "y": 2.517829857343023
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7824530941501242,
-        "y": 5.574358195791997
+        "x": 5.31912573097614,
+        "y": -0.011710836545782637
       },
       "isLocked": false,
-      "linkedName": "CenterNote"
+      "linkedName": "MiddleLeftNote"
     },
     {
       "anchor": {
-        "x": 1.5248146901429311,
-        "y": 6.405827590542485
+        "x": 2.0635131712488803,
+        "y": 1.4053003854937824
       },
       "prevControl": {
-        "x": 1.53468163295374,
-        "y": 5.892746564380431
+        "x": 2.818130201167677,
+        "y": 0.753885102634686
       },
       "nextControl": {
-        "x": 1.5143528715199834,
-        "y": 6.949842158935751
+        "x": 1.308896141330084,
+        "y": 2.0567156683528776
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0355126045487455,
-        "y": 6.979658581285779
+        "x": 0.7518994781213513,
+        "y": 4.239322829572907
       },
       "prevControl": {
-        "x": 2.192332373252477,
-        "y": 7.096766946743594
+        "x": 1.8527181134248125,
+        "y": 2.939419972991159
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightNote"
+      "linkedName": "LeftNoteBlue"
     }
   ],
   "rotationTargets": [],
@@ -49,15 +49,27 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 2.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "StoppedConveyorForward"
+                "name": "LockOnArmAuto"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartShooting"
               }
             }
           ]
@@ -79,7 +91,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 179.27477570094084,
     "velocity": 0
   },
   "useDefaultConstraints": true

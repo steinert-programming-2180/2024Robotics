@@ -5,7 +5,7 @@
       "x": 1.3374413054104268,
       "y": 5.550936522700434
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 1.5
           }
         },
         {
@@ -32,23 +32,23 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeForwardAuto"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "GoToCenterNoteBlue"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeForward"
                 }
               },
               {
@@ -63,7 +63,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -82,6 +82,12 @@
           "type": "named",
           "data": {
             "name": "StartShooting"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {

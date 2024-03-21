@@ -100,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shooter_ampforward(){
-        shooter_leader.set(0.15);
+        shooter_leader.set(0.1);
     }
 
     public void shooter_backwords() {

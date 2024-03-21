@@ -17,12 +17,22 @@ public class StartShooting extends Command{
     ShooterSubsystem shooter;
     LimelightSubsystem llight;
     ConveyorSubsystem conveyorSubsystem;
+    boolean isManual;
 
     public StartShooting(ShooterSubsystem shooter, ConveyorSubsystem conveyor, LimelightSubsystem llight){
         addRequirements(shooter, conveyor, llight);
         this.shooter = shooter;
         this.conveyorSubsystem = conveyor;
         this.llight = llight;
+        this.isManual = false;
+    }
+
+    public StartShooting(ShooterSubsystem shooter, ConveyorSubsystem conveyor, LimelightSubsystem llight, boolean isManual) {
+        addRequirements(shooter, conveyor, llight);
+        this.shooter = shooter;
+        this.conveyorSubsystem = conveyor;
+        this.llight = llight;
+        this.isManual = isManual;
     }
 
     public void initialize(){
@@ -30,7 +40,7 @@ public class StartShooting extends Command{
     }
 
     public void execute() {
-        if (llight.getTx() != 0) {
+        if ((llight.getTx() != 0) || isManual) {
             shooter.shooter_forward();
         } else {
             end(isFinished());

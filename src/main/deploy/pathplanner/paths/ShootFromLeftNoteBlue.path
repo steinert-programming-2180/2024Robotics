@@ -3,58 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.649054998537956,
-        "y": 4.098792791023527
+        "x": 2.7427416909042077,
+        "y": 4.11050362756931
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2203329399526117,
-        "y": 3.9582627524741496
+        "x": 2.06351317124888,
+        "y": 4.2861661757560325
       },
       "isLocked": false,
       "linkedName": "LeftNote"
     },
     {
       "anchor": {
-        "x": 2.649054998537956,
-        "y": 4.684334618312604
+        "x": 1.6770555652380903,
+        "y": 4.567226252854788
       },
       "prevControl": {
-        "x": 1.649054998537956,
-        "y": 4.684334618312604
+        "x": 1.6680213402055397,
+        "y": 4.278131051813177
+      },
+      "nextControl": {
+        "x": 1.6887664017838722,
+        "y": 4.941973022319797
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.8410072768790318,
+        "y": 5.555088802483409
+      },
+      "prevControl": {
+        "x": 1.7004772383296536,
+        "y": 5.141057243598081
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftNoteShootPos"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "LockOnArmAuto"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StartShooting"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 2.5,
@@ -63,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 179.0206803456605,
     "velocity": 0
   },
   "useDefaultConstraints": true
